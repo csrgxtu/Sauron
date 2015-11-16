@@ -12,10 +12,13 @@ from flask_restful import Api
 
 from DefaultRes import DefaultRes
 from UnvisitedRes import UnvisitedRes
+import Init
 
 app = Flask(__name__)
 api = Api(app)
 
+# Database Initialization
+Init.InitDB()
 
 api.add_resource(DefaultRes, '/')
 api.add_resource(UnvisitedRes, '/urls')
