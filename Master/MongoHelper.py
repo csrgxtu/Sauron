@@ -32,11 +32,11 @@ class MongoHelper(object):
 
     def insertDead(self, documents):
         inserted_ids = self.DB['dead'].insert_many(documents['documents']).inserted_ids
-        return [str[id] for id in inserted_ids]
+        return [str(id) for id in inserted_ids]
 
     def insertData(self, documents):
         inserted_ids = self.DB['data'].insert_many(documents['documents']).inserted_ids
-        return [str[id] for id in inserted_ids]
+        return [str(id) for id in inserted_ids]
 
     def readUnvisited(self, start, offset):
         documents = []
@@ -106,7 +106,7 @@ class MongoHelper(object):
 
         return documents
 
-    def retrieveDead(self, start, offfset):
+    def retrieveData(self, start, offfset):
         documents = []
         ids = []
         for doc in self.DB['data'].find():
