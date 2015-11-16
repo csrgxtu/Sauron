@@ -34,6 +34,10 @@ class MongoHelper(object):
         inserted_ids = self.DB['dead'].insert_many(documents['documents']).inserted_ids
         return [str[id] for id in inserted_ids]
 
+    def insertData(self, documents):
+        inserted_ids = self.DB['data'].insert_many(documents['documents']).inserted_ids
+        return [str[id] for id in inserted_ids]
+
     def readUnvisited(self, start, offset):
         documents = []
         for doc in self.DB['unvisited'].find():
@@ -53,6 +57,14 @@ class MongoHelper(object):
     def readDead(self, start, offset):
         documents = []
         for doc in self.DB['dead'].find():
+            doc['_id'] = str(doc['_id'])
+            documents.append(doc)
+
+        return documents
+
+    def readData(self, start, offset):
+        documents = []
+        for doc in self.DB['data'].find():
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -94,6 +106,18 @@ class MongoHelper(object):
 
         return documents
 
+    def retrieveDead(self, start, offfset):
+        documents = []
+        ids = []
+        for doc in self.DB['data'].find():
+            doc['_id'] = str(doc['_id'])
+            ids.append(str(doc['_id']))
+            documents.append(doc)
+
+        self.deleteData(ids)
+
+        return documents
+
     def deleteUnvisited(self, ids):
         for id in ids:
             self.DB['unvisited'].remove({'_id': ObjectId(id)})
@@ -105,3 +129,7 @@ class MongoHelper(object):
     def deleteDead(self, ids):
         for id in ids:
             self.DB['dead'].remove({'_id': ObjectId(id)})
+
+    def deleteData(self, ids):
+        for id in ids:
+            self.DB['data'].remove({'_id': ObjectId(id)})
