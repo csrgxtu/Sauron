@@ -40,6 +40,7 @@ class VisitedRes(Resource):
         return UrlReturn
 
     def delete(self):
+        Json = request.get_json(force=True)
         MH = MongoHelper('localhost', 27017)
-        MH.deleteVisited(['5649bb49f38544370e656295'])
+        MH.deleteVisited(Json['ids'])
         return UrlReturn

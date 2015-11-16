@@ -41,6 +41,7 @@ class DataRes(Resource):
         return UrlReturn
 
     def delete(self):
+        Json = request.get_json(force=True)
         MH = MongoHelper('localhost', 27017)
-        MH.deleteData(['5649bb49f38544370e656295'])
+        MH.deleteData(Json['ids'])
         return UrlReturn
