@@ -19,6 +19,16 @@ Example
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/unvisitedurls
 ```
+#### *Delete* urls from UnvisitedUrls
+```bash
+DELETE http://localhost:5000/unvisitedurls
+
+Json body = {'ids': ['id', 'id']}
+```
+Example
+```
+curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/unvisitedurls
+```
 
 ### 2, VisitedUrls CRUD Operations
 #### *Read* urls from VisitedUrls
@@ -38,6 +48,16 @@ Json body = {'urls': ['http://www.douban.com', 'http://google.com']}
 Example
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/visitedurls
+```
+#### *Delete* urls from VisitedUrls
+```bash
+DELETE http://localhost:5000/visitedurls
+
+Json body = {'ids': ['id', 'id']}
+```
+Example
+```
+curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/visitedurls
 ```
 
 ### 3, DeadUrls CRUD Operations
@@ -59,6 +79,16 @@ Example
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/deadurls
 ```
+#### *Delete* urls from DeadUrls
+```bash
+DELETE http://localhost:5000/deadurls
+
+Json body = {'ids': ['id', 'id']}
+```
+Example
+```
+curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/deadurls
+```
 
 ### 4, DataUrls CRUD Operation
 #### *Read* datas from Data
@@ -78,4 +108,14 @@ Json body = {'datas': ['jsonstr', 'jsonstr']}
 Example
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["jsonstr", "jsonstr"]}' http://localhost:5000/data
+```
+#### *Delete* urls from Data
+```bash
+DELETE http://localhost:5000/data
+
+Json body = {'ids': ['id', 'id']}
+```
+Example
+```
+curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/data
 ```
