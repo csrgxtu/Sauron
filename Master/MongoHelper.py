@@ -28,7 +28,7 @@ class MongoHelper(object):
 
     def insertVisited(self, documents):
         inserted_ids = self.DB['visited'].insert_many(documents['documents']).inserted_ids
-        return [str[id] for id in inserted_ids]
+        return [str(id) for id in inserted_ids]
 
     def insertDead(self, documents):
         inserted_ids = self.DB['dead'].insert_many(documents['documents']).inserted_ids

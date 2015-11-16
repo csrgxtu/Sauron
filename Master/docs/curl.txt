@@ -1,0 +1,5 @@
+curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/unvisitedurls
+curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["5649d932f38544474f8ba343"]}' http://localhost:5000/unvisitedurls
+
+curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/visitedurls
+curl -X DELETE -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/visitedurls
