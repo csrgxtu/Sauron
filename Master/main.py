@@ -12,19 +12,17 @@ from flask_restful import Api
 
 from DefaultRes import DefaultRes
 from UnvisitedRes import UnvisitedRes
-import Init
+from VisitedRes import VisitedRes
+from DeadRes import DeadRes
 
 app = Flask(__name__)
 api = Api(app)
-
-# Database Initialization
-Init.InitDB()
 
 api.add_resource(DefaultRes, '/')
 api.add_resource(UnvisitedRes, '/unvisitedurls')
 api.add_resource(VisitedRes, '/visitedurls')
 api.add_resource(DeadRes, '/deadurls')
-api.add_resource(DataRes, '/data')
+# api.add_resource(DataRes, '/data')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
