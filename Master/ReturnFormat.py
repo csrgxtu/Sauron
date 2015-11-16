@@ -1,3 +1,5 @@
+# coding=utf-8
+#
 # Author: Archer Reilly
 # File: ReturnFormat.py
 # Date: 16/Nov/2015
@@ -10,4 +12,10 @@ Welcom = {
     'code': 200,
     'message': 'Welcome To Sauron The Master',
     'data': 'An Distributed Crawler based on scrapy implemented by Python Flask, Flask-RESTful and MongoDB'
+}
+
+UrlReturn = {
+    'code': 200,
+    'message': 'Successful',
+    'data': None
 }
