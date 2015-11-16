@@ -3,3 +3,5 @@ curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["5649d932f385444
 
 curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/visitedurls
 curl -X DELETE -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/visitedurls
+
+curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://google.com", "http://amazon.com"]}' http://localhost:5000/deadurls
