@@ -26,7 +26,7 @@
 * [scrapy](http://doc.scrapy.org/en/latest/)
 * [pymongo](http://api.mongodb.org/python/current/)
 * [MongoDB](https://www.mongodb.org/)
-
+* [unirest](http://unirest.io/python.html)
 
 
 ### Usage
@@ -42,7 +42,7 @@
 [JOBDIR](http://doc.scrapy.org/en/latest/topics/jobs.html) Jobs: pausing and resuming crawls.
 
 	2.在含有.cfg文件的目录下,输入以下命令, 
-	$scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/urls' -s JOBDIR=crawls/doubanisbnSpider -o slave-douban.json
+	$scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/urls' -s JOBDIR=crawls/doubanisbnSpider
     
     3.开启mongo客户端
     $mongo      

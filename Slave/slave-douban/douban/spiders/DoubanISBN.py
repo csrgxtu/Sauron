@@ -167,4 +167,10 @@ class DoubanISBN(Spider):
         item['url'] = response.url
         item['state'] = response.status
 
-        yield item
+        #yield item
+        import json
+        response = unirest.post(
+        "http://192.168.100.3:5000/data",
+        headers={ "Accept": "application/json" },
+         params=json.dumps(item)
+        )
