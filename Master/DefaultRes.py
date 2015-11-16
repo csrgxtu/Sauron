@@ -1,3 +1,5 @@
+# coding=utf-8
+#
 # Author: Archer Reilly
 # File: DefaultRes.py
 # Date: 16/Nov/2015
