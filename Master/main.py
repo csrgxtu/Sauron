@@ -21,7 +21,7 @@ api = Api(app)
 Init.InitDB()
 
 api.add_resource(DefaultRes, '/')
-api.add_resource(UnvisitedRes, '/urls')
+api.add_resource(UnvisitedRes, '/unvisitedurls')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

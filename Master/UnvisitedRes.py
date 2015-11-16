@@ -27,5 +27,18 @@ class UnvisitedRes(Resource):
         return UrlReturn
 
     def get(self):
+        MH = MongoHelper('localhost', 27017)
+        documents = MH.readUnvisited(0, 10)
+        UrlReturn['data'] = documents
+        return UrlReturn
 
+    def post(self):
+        MH = MongoHelper('localhost', 27017)
+        documents = MH.retrieveUnvisited(0, 10)
+        UrlReturn['data'] = documents
+        return UrlReturn
+
+    def delete(self):
+        MH = MongoHelper('localhost', 27017)
+        MH.deleteUnvisited(['5649bb49f38544370e656295'])
         return UrlReturn

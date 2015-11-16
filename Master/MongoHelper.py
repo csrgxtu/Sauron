@@ -6,6 +6,7 @@
 #
 # Produced By BR
 from pymongo import MongoClient
+from bson import ObjectId
 
 class MongoHelper(object):
     Host = None
@@ -25,5 +26,26 @@ class MongoHelper(object):
         inserted_ids = self.DB['unvisited'].insert_many(documents['documents']).inserted_ids
         return [str(id) for id in inserted_ids]
 
-    def readUnvisited(self):
-        pass
+    def readUnvisited(self, start, offset):
+        documents = []
+        for doc in self.DB['unvisited'].find():
+            doc['_id'] = str(doc['_id'])
+            documents.append(doc)
+
+        return documents
+
+    def retrieveUnvisited(self, start, offset):
+        documents = []
+        ids = []
+        for doc in self.DB['unvisited'].find():
+            doc['_id'] = str(doc['_id'])
+            ids.append(str(doc['_id']))
+            documents.append(doc)
+
+        self.deleteUnvisited(ids)
+
+        return documents
+
+    def deleteUnvisited(self, ids):
+        for id in ids:
+            self.DB['unvisited'].remove({'_id': ObjectId(id)})
