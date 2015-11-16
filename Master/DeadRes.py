@@ -26,14 +26,16 @@ class DeadRes(Resource):
         return UrlReturn
 
     def get(self):
+        args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readDead(0, 10)
+        documents = MH.readDead(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
+        args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveDead(0, 10)
+        documents = MH.retrieveDead(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 

@@ -27,14 +27,16 @@ class DataRes(Resource):
         return UrlReturn
 
     def get(self):
+        args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readData(0, 10)
+        documents = MH.readData(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
+        args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveData(0, 10)
+        documents = MH.retrieveData(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 

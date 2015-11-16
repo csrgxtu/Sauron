@@ -26,14 +26,16 @@ class VisitedRes(Resource):
         return UrlReturn
 
     def get(self):
+        args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readVisited(0, 10)
+        documents = MH.readVisited(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
+        args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveVisited(0, 10)
+        documents = MH.retrieveVisited(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
