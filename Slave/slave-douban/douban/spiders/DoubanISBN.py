@@ -191,6 +191,7 @@ class DoubanISBN(Spider):
             # deadurls
             posturl = "http://192.168.100.3:5000/deadurls"
 
+        #unirest.post
         response = unirest.post(
                         posturl,
                         headers={ "Accept": "application/json" },
