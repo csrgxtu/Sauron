@@ -90,16 +90,16 @@ Example
 curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/deadurls
 ```
 
-### 4, DataUrls CRUD Operation
+### 4, Data CRUD Operation
 #### *Read* datas from Data
 ```bash
 GET http://localhost:5000/data?start=0&offset=10
 ```
-#### *Retrieve* urls from DataUrls
+#### *Retrieve* data from Data
 ```bash
 POST http://localhost:5000/data?start=0&offset=10
 ```
-#### *Insert* urls into DataUrls
+#### *Insert* data into Data
 ```bash
 PUT http://localhost:5000/data
 
@@ -107,9 +107,9 @@ Json body = {'datas': ['jsonstr', 'jsonstr']}
 ```
 Example
 ```bash
-curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["jsonstr", "jsonstr"]}' http://localhost:5000/data
+curl -X PUT -H 'Content-Type: application/json' -d '{"datas": ["jsonstr", "jsonstr"]}' http://localhost:5000/data
 ```
-#### *Delete* urls from Data
+#### *Delete* data from Data
 ```bash
 DELETE http://localhost:5000/data
 
