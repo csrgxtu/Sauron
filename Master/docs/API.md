@@ -119,3 +119,33 @@ Example
 ```
 curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/data
 ```
+
+### 4, File CRUD Operation
+#### *Read* files from file
+```bash
+GET http://localhost:5000/file?start=0&offset=10
+```
+#### *Retrieve* file from File
+```bash
+POST http://localhost:5000/file?start=0&offset=10
+```
+#### *Insert* file into File
+```bash
+PUT http://localhost:5000/file
+
+Json body = {'files': [{"url": "http://google.com", "head": "http head", "body": "html"}]}
+```
+Example
+```bash
+curl -X PUT -H 'Content-Type: application/json' -d '{"files": [{"url": "http://google.com", "head": "http head", "body": "html"}]}' http://localhost:5000/file
+```
+#### *Delete* file from File
+```bash
+DELETE http://localhost:5000/file
+
+Json body = {'ids': ['id', 'id']}
+```
+Example
+```
+curl -X DELETE -H 'Content-Type: application/json' -d '{"ids": ["ids", "ids"]}' http://localhost:5000/file
+```
