@@ -10,7 +10,7 @@ from douban.items import DoubanbooksItem
 from collections import OrderedDict
 
 
-# scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/urls' -s JOBDIR=crawls/doubanisbnSpider -o slave-douban.json
+# scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10' -s JOBDIR=crawls/doubanisbnSpider
 
 class DoubanISBN(Spider):
     #!< DOT name
@@ -23,10 +23,10 @@ class DoubanISBN(Spider):
             req = unirest.get(url, headers={"Accept":"application/json"})
             self.start_urls = req.body['data']
 
-    rules = (
-        Rule(sle(allow=("http://book.douban.com/isbn/\d+$")), callback="parse", follow=True),
-        Rule(sle(allow=("http://book.douban.com/subject/\d+$")), callback="parse", follow=True),
-    )
+        rules = (
+            Rule(sle(allow=("http://book.douban.com/isbn/\d+$")), callback="parse", follow=True),
+            Rule(sle(allow=("http://book.douban.com/subject/\d+$")), callback="parse", follow=True),
+        )
 
     #!< 单独处理每一本书籍信息
     def parse(self, response):
@@ -168,9 +168,31 @@ class DoubanISBN(Spider):
         item['state'] = response.status
 
         #yield item
-        import json
+        state = response.status
+
+        #itemURLstate
+        itemURLstate = dict()
+        itemURLstate['url']   = item['url']
+        itemURLstate['state'] = item['state']
+
+        #posturl
+        posturl = str()
+        if (state==200):
+            # data-->bookinfo
+            response = unirest.post(
+                            "http://192.168.100.3:5000/data",
+                            headers={ "Accept": "application/json" },
+                            params=json.dumps(orderdict)
+                         )
+            # visitedurls
+            posturl = "http://192.168.100.3:5000/visitedurls"
+
+        else:
+            # deadurls
+            posturl = "http://192.168.100.3:5000/deadurls"
+
         response = unirest.post(
-        "http://192.168.100.3:5000/data",
-        headers={ "Accept": "application/json" },
-         params=json.dumps(item)
-        )
+                        posturl,
+                        headers={ "Accept": "application/json" },
+                        params=json.dumps(itemURLstate)
+                    )

@@ -9,9 +9,9 @@ SPIDER_MODULES = ['douban.spiders']
 NEWSPIDER_MODULE = 'douban.spiders'
 
 """
-MONGODB_SERVER = 'localhost'
-MONGODB_PORT = 27017
-MONGODB_DB = 'douban'
+MONGODB_SERVER = 'localhost'    #
+MONGODB_PORT   = 27017
+MONGODB_DB     = 'douban'
 MONGODB_COLLECTION = 'booksisbn'
 """
 
@@ -43,11 +43,10 @@ CONCURRENT_ITEMS=500
 
 # --------------------------------------------------------DOWNLOAD------------------------------------------------------
 # Default:180
-DOWNLOAD_TIMEOUT = 300
 # 默认情况下，Scrapy在两个请求间不等待一个固定的值， 而是使用0.5到1.5之间的一个随机值
 # *DOWNLOAD_DELAY 的结果作为等待间隔。
 #DOWNLOAD_DELAY=2.0
-
+#DOWNLOAD_TIMEOUT = 300
 
 # ---------------------------------------DOWNLOADER_MIDDLEWARES setting ------------------------------------------------
 RETRY_ENABLED = True
@@ -57,7 +56,6 @@ RETRY_TIMES = 10
 # Retry on most error codes since proxies fail for different reasons
 RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 """
-
 400:请求出错-->由于语法格式有误，服务器无法理解此请求。不作修改，客户程序就无法重复此请求。
 403:禁止访问
 404:找不到
@@ -75,7 +73,12 @@ RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 CRAWLERA_ENABLED = True
 CRAWLERA_USER = ***     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
+AUTOTHROTTLE_ENABLED = False
 
+#DOWNLOAD_TIMEOUT = 600
+#CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
+#To avoid this behaviour you can use the CRAWLERA_PRESERVE_DELAY setting
+#but keep in mind that this may slow down the crawl significantly
 
 # 保存项目中启用的下载中间件及其顺序的字典
 # check if non-standard middlewares are used
