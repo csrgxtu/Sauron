@@ -24,21 +24,21 @@ class FileRes(Resource):
         for doc in Json['files']:
             u = uuid.uuid4()
             documents.append({'url': doc['url'], 'filename': u.hex + '.html'})
-            self.save()
+            self.save(doc['head'] + '\n\n' + doc['body'], u.hex + '.html')
 
         MH = MongoHelper('localhost', 27017)
-        UrlReturn['data'] = MH.insertData(Json['files'])
+        UrlReturn['data'] = MH.insertFile({"documents": documents})
         return UrlReturn
 
     def get(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readData(args['start'], args['offset'])
+        documents = MH.readFile(args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def save(self, string, filename):
-        with open('/home/archer/' + filename, w) as myFile:
+        with open('/tmp/' + filename, 'w') as myFile:
             myFile.write(string)
 
         return
