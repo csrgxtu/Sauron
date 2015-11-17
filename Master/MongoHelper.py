@@ -23,15 +23,41 @@ class MongoHelper(object):
     # expecting {'documents': [document, document]}
     # document: {'url': 'http://www.douban.com'}
     def insertUnvisited(self, documents):
-        inserted_ids = self.DB['unvisited'].insert_many(documents['documents']).inserted_ids
+        # first, check if unvisited, visited, dead contains the document, if yes,
+        # remove this document, else prepare insert it into unvisited
+        newDocuments = []
+        for document in documents['documents']:
+            if self.isUnique(document['url']):
+                newDocuments.append(document)
+
+        if len(newDocuments) == 0:
+            return []
+
+        inserted_ids = self.DB['unvisited'].insert_many(newDocuments).inserted_ids
         return [str(id) for id in inserted_ids]
 
     def insertVisited(self, documents):
-        inserted_ids = self.DB['visited'].insert_many(documents['documents']).inserted_ids
+        newDocuments = []
+        for document in documents['documents']:
+            if self.isUnique(document['url']):
+                newDocuments.append(document)
+
+        if len(newDocuments) == 0:
+            return []
+
+        inserted_ids = self.DB['visited'].insert_many(newDocuments).inserted_ids
         return [str(id) for id in inserted_ids]
 
     def insertDead(self, documents):
-        inserted_ids = self.DB['dead'].insert_many(documents['documents']).inserted_ids
+        newDocuments = []
+        for document in documents['documents']:
+            if self.isUnique(document['url']):
+                newDocuments.append(document)
+
+        if len(newDocuments) == 0:
+            return []
+
+        inserted_ids = self.DB['dead'].insert_many(newDocuments).inserted_ids
         return [str(id) for id in inserted_ids]
 
     def insertData(self, documents):
@@ -133,3 +159,34 @@ class MongoHelper(object):
     def deleteData(self, ids):
         for id in ids:
             self.DB['data'].remove({'_id': ObjectId(id)})
+
+    def isUnique(self, url):
+        if self.inUnvisited(url):
+            return False
+        elif self.inVisited(url):
+            return False
+        elif self.inDead(url):
+            return False
+        else:
+            return True
+
+    def inUnvisited(self, url):
+        count = self.DB['unvisited'].count({'url': url})
+        if count == 0:
+            return False
+
+        return True
+
+    def inVisited(self, url):
+        count = self.DB['visited'].count({'url': url})
+        if count == 0:
+            return False
+
+        return True
+
+    def inDead(self, url):
+        count = self.DB['dead'].count({'url': url})
+        if count == 0:
+            return False
+
+        return True
