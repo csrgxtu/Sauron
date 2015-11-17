@@ -42,11 +42,11 @@ CONCURRENT_ITEMS=500
 
 
 # --------------------------------------------------------DOWNLOAD------------------------------------------------------
-# Default:180
 # 默认情况下，Scrapy在两个请求间不等待一个固定的值， 而是使用0.5到1.5之间的一个随机值
 # *DOWNLOAD_DELAY 的结果作为等待间隔。
 #DOWNLOAD_DELAY=2.0
 #DOWNLOAD_TIMEOUT = 300
+DOWNLOAD_DELAY = 0
 
 # ---------------------------------------DOWNLOADER_MIDDLEWARES setting ------------------------------------------------
 RETRY_ENABLED = True
@@ -75,7 +75,7 @@ CRAWLERA_USER = ***     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
-#DOWNLOAD_TIMEOUT = 600
+DOWNLOAD_TIMEOUT = 600
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
 #To avoid this behaviour you can use the CRAWLERA_PRESERVE_DELAY setting
 #but keep in mind that this may slow down the crawl significantly
