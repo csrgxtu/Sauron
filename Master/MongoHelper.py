@@ -66,7 +66,7 @@ class MongoHelper(object):
 
     def insertFile(self, documents):
         pass
-    
+
     def readUnvisited(self, start, offset):
         documents = []
         for doc in self.DB['unvisited'].find():
@@ -77,7 +77,9 @@ class MongoHelper(object):
 
     def readVisited(self, start, offset):
         documents = []
-        for doc in self.DB['visisted'].find():
+        print "fuck wired"
+        for doc in self.DB['visited'].find():
+            print doc
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 

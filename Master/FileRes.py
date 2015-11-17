@@ -14,7 +14,7 @@ import uuid
 from ReturnFormat import UrlReturn
 from MongoHelper import MongoHelper
 
-class DataRes(Resource):
+class FileRes(Resource):
     def put(self):
         # wanting {'files': [file]}
         # file: {'url': url, 'head': 'http head', 'body': 'html'}
@@ -24,7 +24,7 @@ class DataRes(Resource):
         for doc in Json['files']:
             u = uuid.uuid4()
             documents.append({'url': doc['url'], 'filename': u.hex + '.html'})
-            self()
+            self.save()
 
         MH = MongoHelper('localhost', 27017)
         UrlReturn['data'] = MH.insertData(Json['files'])
