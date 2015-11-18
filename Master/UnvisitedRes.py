@@ -30,14 +30,14 @@ class UnvisitedRes(Resource):
     def get(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readUnvisited(args['start'], args['offset'])
+        documents = MH.readUnvisited(args['spider'], args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveUnvisited(args['start'], args['offset'])
+        documents = MH.retrieveUnvisited(args['spider'], args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 

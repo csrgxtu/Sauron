@@ -71,9 +71,9 @@ class MongoHelper(object):
         inserted_ids = self.DB['file'].insert_many(documents['documents']).inserted_ids
         return [str(id) for id in inserted_ids]
 
-    def readUnvisited(self, start, offset):
+    def readUnvisited(self, spider, start, offset):
         documents = []
-        for doc in self.DB['unvisited'].find():
+        for doc in self.DB['unvisited'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -113,10 +113,10 @@ class MongoHelper(object):
 
         return documents
 
-    def retrieveUnvisited(self, start, offset):
+    def retrieveUnvisited(self, spider, start, offset):
         documents = []
         ids = []
-        for doc in self.DB['unvisited'].find():
+        for doc in self.DB['unvisited'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)
