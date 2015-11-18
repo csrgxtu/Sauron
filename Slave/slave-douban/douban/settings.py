@@ -69,13 +69,13 @@ RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 504:（网关超时） 服务器作为网关或代理，但是没有及时从上游服务器收到请求。
 """
 
-"""
+
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
 CRAWLERA_USER = ***     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
-"""
+
 
 DOWNLOAD_TIMEOUT = 600
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
@@ -91,7 +91,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,               # RETRY_HTTP_CODES 500
     #'douban.downloadmiddlewares.randomproxy.RandomProxy':100,               # Proxy
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    #'scrapy_crawlera.CrawleraMiddleware': 600,                               # crawlera
+    'scrapy_crawlera.CrawleraMiddleware': 600,                               # crawlera
 }
 # To make RotateUserAgentMiddleware enable.
 USER_AGENT = ''
