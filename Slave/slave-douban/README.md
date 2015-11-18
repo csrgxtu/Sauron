@@ -30,32 +30,12 @@
 
 
 ### Usage
-
-    1.开启mongodb 服务器 sudo or not.
-    $sudo mongod
-    $password: 
-    
-    OR
-    $mongod
-    
     
 [JOBDIR](http://doc.scrapy.org/en/latest/topics/jobs.html) Jobs: pausing and resuming crawls.
 
-	2.在含有.cfg文件的目录下,输入以下命令, 
-	$scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10' -s JOBDIR=crawls/doubanisbnSpider
+	在含有.cfg文件的目录下,输入以下命令, 
+	$scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban' -s JOBDIR=crawls/doubanisbnSpider
     
-    3.开启mongo客户端
-    $mongo      
-    >show dbs
-    >use amazon
-    >show collections    # collections相当于mysql里面的tables
-    >db.books.find()  # 查看books中的所有书籍信息
-    
-    
-    4 关闭mongo客户端
-    >use admin           # 切换数据库
-    >db.shutdownServer() # 关闭服务器
-    >exit                # 退出客户端
 
 
 ### Note
