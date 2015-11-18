@@ -11,6 +11,7 @@ from flask import request
 from flask_restful import Resource
 import uuid
 import codecs
+import qiniu
 
 from ReturnFormat import UrlReturn
 from MongoHelper import MongoHelper
@@ -25,7 +26,7 @@ class FileRes(Resource):
         for doc in Json['files']:
             u = uuid.uuid4()
             documents.append({'url': doc['url'], 'filename': u.hex + '.html', 'spider': doc['spider']})
-            self.save(doc['head'] + '\n\n' + doc['body'], u.hex + '.html')
+            self.qiniuSave(doc['head'] + '\n\n' + doc['body'], u.hex + '.html')
 
         MH = MongoHelper('localhost', 27017)
         UrlReturn['data'] = MH.insertFile({"documents": documents})
@@ -45,3 +46,14 @@ class FileRes(Resource):
             myFile.write(string)
 
         return
+
+    def qiniuSave(self, string, filename):
+        access_key = ''
+        secrect_key = ''
+        bucket_name = ''
+
+        q = qiniu.Auth(access_key, secrect_key)
+        token = q.upload_token(bucket_name)
+        ret, info = qiniu.put_data(token, 'Saron/' + filename, string)
+
+        return ret

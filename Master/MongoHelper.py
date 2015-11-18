@@ -67,7 +67,8 @@ class MongoHelper(object):
 
     def insertFile(self, documents):
         inserted_ids = self.DB['file'].insert_many(documents['documents']).inserted_ids
-        return [str(id) for id in inserted_ids]
+        # return [str(id) for id in inserted_ids]
+        return [doc['filename'] for doc in documents['documents']]
 
     def readUnvisited(self, spider, start, offset):
         documents = []
