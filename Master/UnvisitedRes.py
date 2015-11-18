@@ -15,15 +15,16 @@ from MongoHelper import MongoHelper
 
 class UnvisitedRes(Resource):
     def put(self):
-        # wanting {'urls': ['url']}
+        # wanting {'urls': [{'url': 'http://go.com', 'spider': 'douban'}]}
         Json = request.get_json(force=True)
         # print Json
         documents = []
         for url in Json['urls']:
-            documents.append({'url': url})
+            documents.append(url)
 
         MH = MongoHelper('localhost', 27017)
         UrlReturn['data'] = MH.insertUnvisited({'documents': documents})
+        MH.close()
         return UrlReturn
 
     def get(self):

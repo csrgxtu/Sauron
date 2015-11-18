@@ -12,13 +12,14 @@ class MongoHelper(object):
     Host = None
     Port = None
     DB = None
+    Client = None
 
     def __init__(self, host, port):
         self.Host = host
         self.Port = port
 
-        client = MongoClient(self.Host, self.Port)
-        self.DB = client['master']
+        self.Client = MongoClient(self.Host, self.Port)
+        self.DB = self.Client['master']
 
     # expecting {'documents': [document, document]}
     # document: {'url': 'http://www.douban.com'}
@@ -27,9 +28,11 @@ class MongoHelper(object):
         # remove this document, else prepare insert it into unvisited
         newDocuments = []
         for document in documents['documents']:
+            print document['url']
             if self.isUnique(document['url']):
                 newDocuments.append(document)
 
+        print len(newDocuments)
         if len(newDocuments) == 0:
             return []
 
@@ -173,6 +176,9 @@ class MongoHelper(object):
     def deleteData(self, ids):
         for id in ids:
             self.DB['data'].remove({'_id': ObjectId(id)})
+
+    def close(self):
+        self.Client.close()
 
     def isUnique(self, url):
         if self.inUnvisited(url):
