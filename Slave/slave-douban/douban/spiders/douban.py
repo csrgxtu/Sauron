@@ -9,19 +9,26 @@ from scrapy.linkextractors import LinkExtractor as sle
 from douban.items import DoubanbooksItem
 from collections import OrderedDict
 
+import logging
 
-# scrapy crawl doubanisbnSpider -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10' -s JOBDIR=crawls/doubanisbnSpider
+# curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://book.douban.com/isbn/9787530214695", "http://book.douban.com/isbn/9787539988023"]}' http://192.168.100.3:5000/unvisitedurls
+# curl -X PUT -H 'Content-Type: application/json' -d '{"datas": ["jsonstr", "fuckitt"]}' http://192.168.100.3:5000/data
+# scrapy crawl douban -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban' -s JOBDIR=crawls/douban
 
 class DoubanISBN(Spider):
     #!< DOT name
-    name = "doubanisbnSpider"
+    name = "douban"
     allowed_domains = ["douban.com"]
 
     #!< load isbns file.
     def __init__(self, url=None):
+
+        #print "here i am"
         if url:
-            req = unirest.get(url, headers={"Accept":"application/json"})
-            self.start_urls = req.body['data']
+            # retrieve with post method, put for create, get for read, delete for delete
+            # unvisitedurls http://localhost:5000/unvisitedurls?start=0&offset=10&spider=douban
+            req = unirest.post(url, headers={"Accept":"application/json"})
+            self.start_urls = [data['url'] for data in req.body['data']]
 
         rules = (
             Rule(sle(allow=("http://book.douban.com/isbn/\d+$")), callback="parse", follow=True),
@@ -160,40 +167,50 @@ class DoubanISBN(Spider):
         orderdict[u'书籍购买来源'] = buybook
 
         #!< 书籍链接
-        orderdict[u'书籍链接'] = response.url
+        bookurl  = response.url
+        urlstate = response.status
+
+        orderdict[u'书籍链接'] = bookurl
 
         #!< Slave machine return data.
         item['bookinfo'] = orderdict
-        item['url'] = response.url
-        item['state'] = response.status
+        item['url']      = bookurl
+        item['state']    = urlstate
 
-        #yield item
-        state = response.status
-
-        #itemURLstate
-        itemURLstate = dict()
-        itemURLstate['url']   = item['url']
-        itemURLstate['state'] = item['state']
-
-        #posturl
+        #!< return data to 192.168.100.3:5000 !!! !!! !!!
         posturl = str()
-        if (state==200):
-            # data-->bookinfo
-            response = unirest.post(
+        if (urlstate==200):
+
+            #!< book datas !!!
+            bookdict = {}
+            bookdict['datas'] = [{'url':bookurl, 'data':orderdict, 'spider':'douban'}]
+            response = unirest.put(
                             "http://192.168.100.3:5000/data",
-                            headers={ "Accept": "application/json" },
-                            params=json.dumps(orderdict)
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(bookdict)
                          )
-            # visitedurls
+
+            #!< file-->book url , headers, body !!!
+            filedict = {}
+            filedict['files'] = [{'url':bookurl, 'head':response.head, 'body':response.body, 'spider':'douban'}]
+            response = unirest.put(
+                            "http://192.168.100.3:5000/data",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(filedict)
+                         )
+
+            #!< visitedurls !!!
             posturl = "http://192.168.100.3:5000/visitedurls"
 
         else:
-            # deadurls
+            #!< deadurls !!!
             posturl = "http://192.168.100.3:5000/deadurls"
 
-        #unirest.post
-        response = unirest.post(
+        #!< visitedurls or deadurls !!!
+        urldict = {}
+        urldict['urls'] = [{'url':bookurl, 'spider':'douban'}]
+        response = unirest.put(
                         posturl,
-                        headers={ "Accept": "application/json" },
-                        params=json.dumps(itemURLstate)
+                        headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                        params=json.dumps(urldict)
                     )
