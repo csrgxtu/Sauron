@@ -61,12 +61,17 @@ class DoubanISBN(Spider):
                 coverurl = coverurlv.replace('mpic','lpic')
         orderdict[u'书籍封面'] = coverurl
 
-        rateTmp = sel.xpath('//div[@class="rating_wrap"]/p/strong/text()').extract()
+        rateTmp1 = sel.xpath('//div[@class="rating_wrap"]/p/strong/text()').extract()
+        rateTmp2 = sel.xpath('//strong[@class="ll rating_num "]/text()').extract()
         rate = str()
-        if (rateTmp != []):
-            rate = rateTmp[0].strip()
-        orderdict[u'评分'] = rate
+        if (rateTmp1 != []):
+            rate = rateTmp1[0].strip()
+        elif(rateTmp2 != []):
+            rate = rateTmp2[0].strip()
+        else:
+            pass
 
+        orderdict[u'评分'] = rate
 
         #!< 作者，出版社，原书名，译者，出版年，页数，定价，装帧，丛书，ISBN
         sels = sel.xpath('//div[@id="info"]/span')
@@ -181,22 +186,22 @@ class DoubanISBN(Spider):
             #!< book datas !!!
             bookdict = {}
             bookdict['datas'] = [{'url':bookurl, 'data':orderdict, 'spider':'douban'}]
-            response = unirest.put(
+            resdata = unirest.put(
                             "http://192.168.100.3:5000/data",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(bookdict)
                          )
 
-            #!< file-->book url , headers, body !!!
+            #!< file-->bookurl , headers, body, spider !!!
             filedict = {}
-            try:
-                urlhead = response.headers.to_string()
-            except:
-                urlhead = str(response.headers)
-                #print 'str to response.headers'
 
-            filedict['files'] = [{'url':bookurl, 'head':urlhead, 'body':response.body, 'spider':'douban'}]
-            response = unirest.put(
+            filedict['files'] = [{
+                                    'url':bookurl,
+                                    'head':response.headers.to_string(),
+                                    'body':response.body,
+                                    'spider':'douban'
+                                }]
+            resfile = unirest.put(
                             "http://192.168.100.3:5000/file",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(filedict)
@@ -209,10 +214,10 @@ class DoubanISBN(Spider):
             #!< deadurls !!!
             posturl = "http://192.168.100.3:5000/deadurls"
 
-        #!< visitedurls or deadurls !!!
+        #!< visitedurls or deadurls and spider !!!
         urldict = {}
         urldict['urls'] = [{'url':bookurl, 'spider':'douban'}]
-        response = unirest.put(
+        resurl = unirest.put(
                         posturl,
                         headers={ "Accept": "application/json", "Content-Type": "application/json" },
                         params=json.dumps(urldict)
