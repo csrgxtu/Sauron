@@ -6,13 +6,19 @@ from scrapy.spiders import Spider,Rule
 from scrapy.selector import Selector
 from scrapy.linkextractors import LinkExtractor as sle
 
-from douban.items import DoubanbooksItem
 from collections import OrderedDict
 
 import logging
 
-# curl -X PUT -H 'Content-Type: application/json' -d '{"urls": ["http://book.douban.com/isbn/9787530214695", "http://book.douban.com/isbn/9787539988023"]}' http://192.168.100.3:5000/unvisitedurls
+#!< 插入unvisitedurls
+# curl -X PUT -H 'Content-Type: application/json'
+# -d '{"urls": [{"url":"http://book.douban.com/isbn/9787530214695", "spider":"douban"}, {"url":"http://book.douban.com/isbn/9787539988023", "spider":"douban"}]}'
+# http://192.168.100.3:5000/unvisitedurls
+
+#!< 插入data
 # curl -X PUT -H 'Content-Type: application/json' -d '{"datas": ["jsonstr", "fuckitt"]}' http://192.168.100.3:5000/data
+
+#!< 运行spider
 # scrapy crawl douban -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban' -s JOBDIR=crawls/douban
 
 class DoubanISBN(Spider):
@@ -38,7 +44,6 @@ class DoubanISBN(Spider):
     #!< 单独处理每一本书籍信息
     def parse(self, response):
 
-        item = DoubanbooksItem()
         sel = Selector(text=response.body)
 
         # OrderedDict的Key会按照插入的顺序排列
@@ -172,11 +177,6 @@ class DoubanISBN(Spider):
 
         orderdict[u'书籍链接'] = bookurl
 
-        #!< Slave machine return data.
-        item['bookinfo'] = orderdict
-        item['url']      = bookurl
-        item['state']    = urlstate
-
         #!< return data to 192.168.100.3:5000 !!! !!! !!!
         posturl = str()
         if (urlstate==200):
@@ -192,9 +192,15 @@ class DoubanISBN(Spider):
 
             #!< file-->book url , headers, body !!!
             filedict = {}
-            filedict['files'] = [{'url':bookurl, 'head':response.head, 'body':response.body, 'spider':'douban'}]
+            try:
+                urlhead = response.headers.to_string()
+            except:
+                urlhead = str(response.headers)
+                #print 'str to response.headers'
+
+            filedict['files'] = [{'url':bookurl, 'head':urlhead, 'body':response.body, 'spider':'douban'}]
             response = unirest.put(
-                            "http://192.168.100.3:5000/data",
+                            "http://192.168.100.3:5000/file",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(filedict)
                          )
