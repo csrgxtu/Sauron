@@ -15,7 +15,7 @@ from MongoHelper import MongoHelper
 
 class DeadRes(Resource):
     def put(self):
-        # wanting {'urls': ['url']}
+        # wanting {'urls': [{'url': 'http://go.com', 'spider': 'google'}]}
         Json = request.get_json(force=True)
         documents = []
         for url in Json['urls']:
