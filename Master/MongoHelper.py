@@ -87,9 +87,9 @@ class MongoHelper(object):
 
         return documents
 
-    def readDead(self, start, offset):
+    def readDead(self, spider, start, offset):
         documents = []
-        for doc in self.DB['dead'].find():
+        for doc in self.DB['dead'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -135,10 +135,10 @@ class MongoHelper(object):
 
         return documents
 
-    def retrieveDead(self, start, offfset):
+    def retrieveDead(self, spider, start, offfset):
         documents = []
         ids = []
-        for doc in self.DB['dead'].find():
+        for doc in self.DB['dead'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)

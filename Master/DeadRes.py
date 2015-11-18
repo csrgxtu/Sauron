@@ -19,23 +19,26 @@ class DeadRes(Resource):
         Json = request.get_json(force=True)
         documents = []
         for url in Json['urls']:
-            documents.append({'url': url})
+            documents.append(url)
 
         MH = MongoHelper('localhost', 27017)
         UrlReturn['data'] = MH.insertDead({'documents': documents})
+        MH.close()
         return UrlReturn
 
     def get(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readDead(args['start'], args['offset'])
+        documents = MH.readDead(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveDead(args['start'], args['offset'])
+        documents = MH.retrieveDead(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
@@ -43,4 +46,5 @@ class DeadRes(Resource):
         Json = request.get_json(force=True)
         MH = MongoHelper('localhost', 27017)
         MH.deleteDead(Json['ids'])
+        MH.close()
         return UrlReturn
