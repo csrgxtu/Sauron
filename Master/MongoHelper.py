@@ -28,11 +28,9 @@ class MongoHelper(object):
         # remove this document, else prepare insert it into unvisited
         newDocuments = []
         for document in documents['documents']:
-            print document['url']
             if self.isUnique(document['url']):
                 newDocuments.append(document)
 
-        print len(newDocuments)
         if len(newDocuments) == 0:
             return []
 
@@ -79,10 +77,10 @@ class MongoHelper(object):
 
         return documents
 
-    def readVisited(self, start, offset):
+    def readVisited(self, spider, start, offset):
         documents = []
         print "fuck wired"
-        for doc in self.DB['visited'].find():
+        for doc in self.DB['visited'].find({'spider': spider}):
             print doc
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
@@ -125,10 +123,10 @@ class MongoHelper(object):
 
         return documents
 
-    def retrieveVisited(self, start, offfset):
+    def retrieveVisited(self, spider, start, offfset):
         documents = []
         ids = []
-        for doc in self.DB['visited'].find():
+        for doc in self.DB['visited'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)

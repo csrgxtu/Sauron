@@ -31,6 +31,7 @@ class UnvisitedRes(Resource):
         args = request.args
         MH = MongoHelper('localhost', 27017)
         documents = MH.readUnvisited(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
@@ -38,6 +39,7 @@ class UnvisitedRes(Resource):
         args = request.args
         MH = MongoHelper('localhost', 27017)
         documents = MH.retrieveUnvisited(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
@@ -45,4 +47,5 @@ class UnvisitedRes(Resource):
         Json = request.get_json(force=True)
         MH = MongoHelper('localhost', 27017)
         MH.deleteUnvisited(Json['ids'])
+        MH.close()
         return UrlReturn

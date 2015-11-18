@@ -19,23 +19,26 @@ class VisitedRes(Resource):
         Json = request.get_json(force=True)
         documents = []
         for url in Json['urls']:
-            documents.append({'url': url})
+            documents.append(url)
 
         MH = MongoHelper('localhost', 27017)
         UrlReturn['data'] = MH.insertVisited({'documents': documents})
+        MH.close()
         return UrlReturn
 
     def get(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readVisited(args['start'], args['offset'])
+        documents = MH.readVisited(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveVisited(args['start'], args['offset'])
+        documents = MH.retrieveVisited(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
@@ -43,4 +46,5 @@ class VisitedRes(Resource):
         Json = request.get_json(force=True)
         MH = MongoHelper('localhost', 27017)
         MH.deleteVisited(Json['ids'])
+        MH.close()
         return UrlReturn
