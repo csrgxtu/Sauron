@@ -95,9 +95,9 @@ class MongoHelper(object):
 
         return documents
 
-    def readData(self, start, offset):
+    def readData(self, spider, start, offset):
         documents = []
-        for doc in self.DB['data'].find():
+        for doc in self.DB['data'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -147,10 +147,10 @@ class MongoHelper(object):
 
         return documents
 
-    def retrieveData(self, start, offfset):
+    def retrieveData(self, spider, start, offfset):
         documents = []
         ids = []
-        for doc in self.DB['data'].find():
+        for doc in self.DB['data'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)

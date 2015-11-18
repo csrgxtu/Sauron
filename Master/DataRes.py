@@ -16,27 +16,30 @@ from MongoHelper import MongoHelper
 class DataRes(Resource):
     def put(self):
         # wanting {'datas': [data]}
-        # data: {'url': url, data: 'json or str'}
+        # data: {'url': url, data: 'json or str', 'spider': 'google'}
         Json = request.get_json(force=True)
         documents = []
         for data in Json['datas']:
-            documents.append({'data': data})
+            documents.append(data)
 
         MH = MongoHelper('localhost', 27017)
         UrlReturn['data'] = MH.insertData({'documents': documents})
+        MH.close()
         return UrlReturn
 
     def get(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.readData(args['start'], args['offset'])
+        documents = MH.readData(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
         args = request.args
         MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveData(args['start'], args['offset'])
+        documents = MH.retrieveData(args['spider'], args['start'], args['offset'])
+        MH.close()
         UrlReturn['data'] = documents
         return UrlReturn
 
@@ -44,4 +47,5 @@ class DataRes(Resource):
         Json = request.get_json(force=True)
         MH = MongoHelper('localhost', 27017)
         MH.deleteData(Json['ids'])
+        MH.close()
         return UrlReturn
