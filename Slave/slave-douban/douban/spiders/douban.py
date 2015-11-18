@@ -15,9 +15,6 @@ import logging
 # -d '{"urls": [{"url":"http://book.douban.com/isbn/9787530214695", "spider":"douban"}, {"url":"http://book.douban.com/isbn/9787539988023", "spider":"douban"}]}'
 # http://192.168.100.3:5000/unvisitedurls
 
-#!< 插入data
-# curl -X PUT -H 'Content-Type: application/json' -d '{"datas": ["jsonstr", "fuckitt"]}' http://192.168.100.3:5000/data
-
 #!< 运行spider
 # scrapy crawl douban -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban' -s JOBDIR=crawls/douban
 
