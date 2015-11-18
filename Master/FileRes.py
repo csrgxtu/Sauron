@@ -10,6 +10,7 @@ import pymongo
 from flask import request
 from flask_restful import Resource
 import uuid
+import codecs
 
 from ReturnFormat import UrlReturn
 from MongoHelper import MongoHelper
@@ -40,7 +41,7 @@ class FileRes(Resource):
         return UrlReturn
 
     def save(self, string, filename):
-        with open('/tmp/' + filename, 'w') as myFile:
+        with codecs.open('/tmp/' + filename, 'w', 'utf-8') as myFile:
             myFile.write(string)
 
         return
