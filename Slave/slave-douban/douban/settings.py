@@ -98,8 +98,7 @@ USER_AGENT = ''
 
 # --------------------------------------------------pipelines setting -------------------------------------------------
 #ITEM_PIPELINES = {
-    #'douban.pipelines.MongoPipeline.MongoPipeline': 0,
-    #'douban.pipelines.DownCoverPipeline.DownCoverPipeline':1,
+    #'douban.MongoPipeline.MongoPipeline': 0,
 #}
 
 # Disable cookies (default True)
