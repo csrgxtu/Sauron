@@ -103,9 +103,9 @@ class MongoHelper(object):
 
         return documents
 
-    def readFile(self, start, offset):
+    def readFile(self, spider, start, offset):
         documents = []
-        for doc in self.DB['file'].find():
+        for doc in self.DB['file'].find({'spider': spider}):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
