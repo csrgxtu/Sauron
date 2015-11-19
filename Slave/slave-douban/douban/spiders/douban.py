@@ -31,9 +31,9 @@ class DoubanISBN(Spider):
             # retrieve with post method, put for create, get for read, delete for delete
             # unvisitedurls http://localhost:5000/unvisitedurls?start=0&offset=10&spider=douban
             req = unirest.post(url, headers={"Accept":"application/json"})
-            print req.body
+            #print req.body
             self.start_urls = [data['url'] for data in req.body['data']]
-            print self.start_urls
+            #print self.start_urls
 
         rules = (
             Rule(sle(allow=("http://book.douban.com/isbn/\d+$")), callback="parse", follow=True),
