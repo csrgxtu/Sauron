@@ -181,7 +181,7 @@ class DoubanISBN(Spider):
         orderdict[u'书籍链接'] = bookurl
 
         #!< return data to 192.168.100.3:5000 !!! !!! !!!
-        posturl = str()
+        #posturl = str()
         if (urlstate==200):
 
             #!< book datas !!!
@@ -208,17 +208,19 @@ class DoubanISBN(Spider):
                          )
 
             #!< visitedurls !!!
-            posturl = "http://192.168.100.3:5000/visitedurls"
-
+            urldict = {}
+            urldict['urls'] = [{'url':bookurl, 'spider':'douban'}]
+            resurl = unirest.put(
+                            "http://192.168.100.3:5000/visitedurls",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(urldict)
+                        )
         else:
             #!< deadurls !!!
-            posturl = "http://192.168.100.3:5000/deadurls"
-
-        #!< visitedurls or deadurls and spider !!!
-        urldict = {}
-        urldict['urls'] = [{'url':bookurl, 'spider':'douban'}]
-        resurl = unirest.put(
-                        posturl,
-                        headers={ "Accept": "application/json", "Content-Type": "application/json" },
-                        params=json.dumps(urldict)
-                    )
+            urldict = {}
+            urldict['urls'] = [{'url':bookurl, 'spider':'douban'}]
+            resurl = unirest.put(
+                            "http://192.168.100.3:5000/deadurls",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(urldict)
+                        )
