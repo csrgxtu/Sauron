@@ -72,7 +72,7 @@ class MongoHelper(object):
 
     def readUnvisited(self, spider, start, offset):
         documents = []
-        for doc in self.DB['unvisited'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['unvisited'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -81,7 +81,7 @@ class MongoHelper(object):
     def readVisited(self, spider, start, offset):
         documents = []
         print "fuck wired"
-        for doc in self.DB['visited'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['visited'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             print doc
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
@@ -90,7 +90,7 @@ class MongoHelper(object):
 
     def readDead(self, spider, start, offset):
         documents = []
-        for doc in self.DB['dead'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['dead'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -98,7 +98,7 @@ class MongoHelper(object):
 
     def readData(self, spider, start, offset):
         documents = []
-        for doc in self.DB['data'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['data'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -106,7 +106,7 @@ class MongoHelper(object):
 
     def readFile(self, spider, start, offset):
         documents = []
-        for doc in self.DB['file'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['file'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             documents.append(doc)
 
@@ -115,7 +115,7 @@ class MongoHelper(object):
     def retrieveUnvisited(self, spider, start, offset):
         documents = []
         ids = []
-        for doc in self.DB['unvisited'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['unvisited'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)
@@ -127,7 +127,7 @@ class MongoHelper(object):
     def retrieveVisited(self, spider, start, offfset):
         documents = []
         ids = []
-        for doc in self.DB['visited'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['visited'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)
@@ -139,7 +139,7 @@ class MongoHelper(object):
     def retrieveDead(self, spider, start, offfset):
         documents = []
         ids = []
-        for doc in self.DB['dead'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['dead'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)
@@ -151,7 +151,7 @@ class MongoHelper(object):
     def retrieveData(self, spider, start, offfset):
         documents = []
         ids = []
-        for doc in self.DB['data'].find({'spider': spider}).skip(start).limit(offset):
+        for doc in self.DB['data'].find({'spider': spider}).skip(int(start)).limit(int(offset):
             doc['_id'] = str(doc['_id'])
             ids.append(str(doc['_id']))
             documents.append(doc)
