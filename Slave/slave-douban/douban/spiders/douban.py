@@ -12,7 +12,7 @@ import logging
 
 #!< 插入unvisitedurls
 # curl -X PUT -H 'Content-Type: application/json'
-# -d '{"urls": [{"url":"http://book.douban.com/isbn/9787530214695", "spider":"douban"}, {"url":"http://book.douban.com/isbn/9787539988023", "spider":"douban"}]}'
+# -d '{"urls": [{"url":"http://book.douban.com/isbn/9787530214695", "spider":"douban"}]}'
 # http://192.168.100.3:5000/unvisitedurls
 
 #!< 运行spider
@@ -31,7 +31,9 @@ class DoubanISBN(Spider):
             # retrieve with post method, put for create, get for read, delete for delete
             # unvisitedurls http://localhost:5000/unvisitedurls?start=0&offset=10&spider=douban
             req = unirest.post(url, headers={"Accept":"application/json"})
+            print req.body
             self.start_urls = [data['url'] for data in req.body['data']]
+            print self.start_urls
 
         rules = (
             Rule(sle(allow=("http://book.douban.com/isbn/\d+$")), callback="parse", follow=True),
@@ -142,7 +144,6 @@ class DoubanISBN(Spider):
                         OrderedDict[t] = content
             else:
                 for i in xrange(lenth):
-
                     title = titles[i]
                     t = title.xpath('span/text()').extract()
                     t = t[0] if (t!=[]) else ('')
@@ -194,7 +195,6 @@ class DoubanISBN(Spider):
 
             #!< file-->bookurl , headers, body, spider !!!
             filedict = {}
-
             filedict['files'] = [{
                                     'url':bookurl,
                                     'head':response.headers.to_string(),
