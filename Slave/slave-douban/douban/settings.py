@@ -46,7 +46,10 @@ CONCURRENT_ITEMS=500
 # *DOWNLOAD_DELAY 的结果作为等待间隔。
 #DOWNLOAD_DELAY=2.0
 #DOWNLOAD_TIMEOUT = 300
-DOWNLOAD_DELAY = 0
+#DOWNLOAD_DELAY = 0
+
+# Disable cookies (default True)
+COOKIES_ENABLED = True
 
 # ---------------------------------------DOWNLOADER_MIDDLEWARES setting ------------------------------------------------
 RETRY_ENABLED = True
@@ -69,13 +72,11 @@ RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 504:（网关超时） 服务器作为网关或代理，但是没有及时从上游服务器收到请求。
 """
 
-
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
-CRAWLERA_USER = ***     # add your CRAWLERA_USER string value !!!
+CRAWLERA_USER = '***'     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
-
 
 DOWNLOAD_TIMEOUT = 600
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
@@ -100,6 +101,3 @@ USER_AGENT = ''
 #ITEM_PIPELINES = {
     #'douban.MongoPipeline.MongoPipeline': 0,
 #}
-
-# Disable cookies (default True)
-COOKIES_ENABLED = True
