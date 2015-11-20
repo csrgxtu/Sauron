@@ -8,13 +8,6 @@ BOT_NAME = 'douban'
 SPIDER_MODULES = ['douban.spiders']
 NEWSPIDER_MODULE = 'douban.spiders'
 
-"""
-MONGODB_SERVER = 'localhost'    #
-MONGODB_PORT   = 27017
-MONGODB_DB     = 'douban'
-MONGODB_COLLECTION = 'booksisbn'
-"""
-
 #!< http://stackoverflow.com/questions/17029752/speed-up-web-scraper
 # --------------------------------------------------------LOG_Thread----------------------------------------------------
 # LOG_ENABLED default: True
@@ -23,22 +16,22 @@ LOG_ENABLED = True
 #LOG_FILE = './logs/booksisbn.log'
 
 # The maximum limit for Twisted Reactor thread pool size. Default: 10.
-REACTOR_THREADPOOL_MAXSIZE = 50
+REACTOR_THREADPOOL_MAXSIZE = 10
 
 # ------------------------------------------------------CONCURRENT------------------------------------------------------
 #!< http://docs.pythontab.com/scrapy/scrapy0.24/topics/settings.html
 # Scrapy downloader 并发请求(concurrent requests)的最大值。 (default: 16)
-CONCURRENT_REQUESTS=32            #32
+CONCURRENT_REQUESTS=40            #32
 
 # The download delay setting will honor only one of CONCURRENT_REQUESTS_PER_DOMAIN and CONCURRENT_REQUESTS_PER_IP.
 # 对单个网站进行并发请求的最大值。(default: 8)
-CONCURRENT_REQUESTS_PER_DOMAIN=32 #32
+CONCURRENT_REQUESTS_PER_DOMAIN=40 #32
 
 # 当 CONCURRENT_REQUESTS_PER_IP 非0时，延迟针对的是每个ip而不是网站。
-CONCURRENT_REQUESTS_PER_IP=32
+CONCURRENT_REQUESTS_PER_IP=40
 
 #Item Processor(即 Item Pipeline) 同时处理(每个response的)item的最大值。默认:100
-CONCURRENT_ITEMS=500
+CONCURRENT_ITEMS=40
 
 
 # --------------------------------------------------------DOWNLOAD------------------------------------------------------
@@ -57,7 +50,7 @@ RETRY_ENABLED = True
 # Retry many times since proxies often fail
 RETRY_TIMES = 10
 # Retry on most error codes since proxies fail for different reasons
-RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
+RETRY_HTTP_CODES = [400, 403, 408, 429, 500, 501, 502, 503, 504] # 404,
 """
 400:请求出错-->由于语法格式有误，服务器无法理解此请求。不作修改，客户程序就无法重复此请求。
 403:禁止访问
@@ -74,11 +67,12 @@ RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
-CRAWLERA_USER = '***'     # add your CRAWLERA_USER string value !!!
+CRAWLERA_USER = 'a7f47b8a2d7b4ab9b7f782669f0c729e'     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
-DOWNLOAD_TIMEOUT = 600
+
+DOWNLOAD_TIMEOUT = 300
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
 #To avoid this behaviour you can use the CRAWLERA_PRESERVE_DELAY setting
 #but keep in mind that this may slow down the crawl significantly
@@ -89,15 +83,10 @@ DOWNLOADER_MIDDLEWARES = {
     #'douban.downloadmiddlewares.googlecache.GoogleCache':50,
     #'douban.downloadmiddlewares.randomuseragent.RandomUserAgent':400,       # UserAgent 400
     #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,               # RETRY_HTTP_CODES 500
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,               # RETRY_HTTP_CODES 500
     #'douban.downloadmiddlewares.randomproxy.RandomProxy':100,               # Proxy
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'scrapy_crawlera.CrawleraMiddleware': 600,                               # crawlera
+    'scrapy_crawlera.CrawleraMiddleware': 500,                               # crawlera
 }
 # To make RotateUserAgentMiddleware enable.
 USER_AGENT = ''
-
-# --------------------------------------------------pipelines setting -------------------------------------------------
-#ITEM_PIPELINES = {
-    #'douban.MongoPipeline.MongoPipeline': 0,
-#}
