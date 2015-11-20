@@ -6,6 +6,10 @@ from scrapy.spiders import Spider,Rule
 from scrapy.selector import Selector
 from scrapy.linkextractors import LinkExtractor as sle
 from collections import OrderedDict
+import logging
+
+from scrapy import signals
+from scrapy.xlib.pydispatch import dispatcher
 
 #!< 插入unvisitedurls
 # curl -X PUT -H 'Content-Type: application/json'
@@ -44,6 +48,8 @@ class DoubanISBN(Spider):
                 Rule(sle(allow=("http://book.douban.com/isbn/\d+$")), callback="parse", follow=True),
                 Rule(sle(allow=("http://book.douban.com/subject/\d+$")), callback="parse", follow=True),
             )
+        # def __del__(self) work
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
 
 
     #!< 单独处理每一本书籍信息
@@ -147,7 +153,7 @@ class DoubanISBN(Spider):
                             content = values[i+1].xpath('div/div[@class="intro"]/p/text()').extract()
 
                     if (i<2):
-                        OrderedDict[t] = content
+                        orderdict[t] = content
             else:
                 for i in xrange(lenth):
                     title = titles[i]
@@ -190,8 +196,6 @@ class DoubanISBN(Spider):
         #posturl = str()
         if (urlstate==200):
             #!< visitedurls !!!
-            self.VisitedUrls.append(bookurl)
-
             urldt = {}
             urldt = {'url':bookurl, 'spider':'douban'}
             self.visitedurldict['urls'].append(urldt)
@@ -210,14 +214,15 @@ class DoubanISBN(Spider):
                         'spider':'douban'
                     }
             self.filedict['files'].append(filedt)
+
         else:
             #!< deadurls !!!
             urldt = {}
             urldt = {'url':bookurl, 'spider':'douban'}
             self.deadurldict['urls'].append(urldt)
 
-
-    def __del__(self):
+    # !< overwrite!
+    def spider_closed(self, spider):
         """
         Put visitedurldict, datadict, filedict,  deadurldict to Master.
         Format:
@@ -230,16 +235,15 @@ class DoubanISBN(Spider):
         deadurldict['urls']    = [ {'url':'', 'spider':'douban'},  {'url':'', 'spider':'douban} ]
         """
         #scrapy crawl douban -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban'
-
         lenOfdeadUrls = len(self.deadurldict['urls'])
 
         if (lenOfdeadUrls==10):
-
             resdeadurl = unirest.put(
                             "http://192.168.100.3:5000/deadurls",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.deadurldict)
                         )
+
         elif(lenOfdeadUrls==0):
             resvisitedurl = unirest.put(
                             "http://192.168.100.3:5000/visitedurls",
@@ -258,6 +262,7 @@ class DoubanISBN(Spider):
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.filedict)
                          )
+
         else:# lenOfdeadUrls in (0,10)
 
             resvisitedurl = unirest.put(
