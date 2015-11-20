@@ -11,6 +11,8 @@ import logging
 from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 
+from scrapy.conf import settings
+
 #!< 插入unvisitedurls
 # curl -X PUT -H 'Content-Type: application/json'
 # -d '{"urls": [{"url":"http://book.douban.com/isbn/9787530214695", "spider":"douban"}]}'
@@ -23,6 +25,19 @@ class DoubanISBN(Spider):
     #!< DOT name
     name = "douban"
     allowed_domains = ["douban.com"]
+
+    handle_httpstatus_list = [\
+    400, 401, 402, 403, 404, 405, 406, 407, 408, 409,\
+    410, 411, 412, 413, 414, 415, 416, 417, 418, 419,\
+    420, 421, 422, 423, 424, 426, 428, 429, 431,\
+    440, 444, 449,\
+    450, 451,\
+    494, 495, 496, 496, 497, 498, 499,\
+    500, 501, 502, 503, 504, 505, 506, 507, 508, 509,\
+    510, 511,\
+    520, 522,\
+    598, 599\
+    ]
 
     #!< load isbns file.
     def __init__(self, url=None):
@@ -194,7 +209,7 @@ class DoubanISBN(Spider):
 
         #!< return data to 192.168.100.3:5000 !!! !!! !!!
         #posturl = str()
-        if (urlstate==200):
+        if (200<=urlstate<400):
             #!< visitedurls !!!
             urldt = {}
             urldt = {'url':bookurl, 'spider':'douban'}
@@ -214,12 +229,28 @@ class DoubanISBN(Spider):
                         'spider':'douban'
                     }
             self.filedict['files'].append(filedt)
-
         else:
             #!< deadurls !!!
             urldt = {}
             urldt = {'url':bookurl, 'spider':'douban'}
             self.deadurldict['urls'].append(urldt)
+
+            # if (urlstate==403):
+            #
+            #     settings.overrides['CRAWLERA_ENABLED'] = True
+            #     settings.overrides['CRAWLERA_USER'] = '***'
+            #     settings.overrides['CRAWLERA_PASS'] = ''
+            #     settings.overrides['DOWNLOADER_MIDDLEWARES'] = {
+            #         'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,  # RETRY_HTTP_CODES 500
+            #         'scrapy_crawlera.CrawleraMiddleware': 500,                  # crawlera
+            #     }
+            #     logging.info('Try overrides settings!!!')
+            #     logging.info(settings['CRAWLERA_ENABLED'])
+            #     logging.info(settings['CRAWLERA_USER'])
+            #     logging.info(settings['CRAWLERA_PASS'])
+            #     logging.info(settings['DOWNLOADER_MIDDLEWARES'])
+            #     logging.info('The Fuck')
+
 
     # !< overwrite!
     def spider_closed(self, spider):
