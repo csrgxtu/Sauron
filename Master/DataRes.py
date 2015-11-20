@@ -14,6 +14,11 @@ from ReturnFormat import UrlReturn
 from MongoHelper import MongoHelper
 
 class DataRes(Resource):
+    MH = None
+
+    def __init__(self, MH):
+        self.MH = MH
+
     def put(self):
         # wanting {'datas': [data]}
         # data: {'url': url, data: 'json or str', 'spider': 'google'}
@@ -22,30 +27,22 @@ class DataRes(Resource):
         for data in Json['datas']:
             documents.append(data)
 
-        MH = MongoHelper('localhost', 27017)
-        UrlReturn['data'] = MH.insertData({'documents': documents})
-        MH.close()
+        UrlReturn['data'] = self.MH.insertData({'documents': documents})
         return UrlReturn
 
     def get(self):
         args = request.args
-        MH = MongoHelper('localhost', 27017)
-        documents = MH.readData(args['spider'], args['start'], args['offset'])
-        MH.close()
+        documents = self.MH.readData(args['spider'], args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
         args = request.args
-        MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveData(args['spider'], args['start'], args['offset'])
-        MH.close()
+        documents = self.MH.retrieveData(args['spider'], args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def delete(self):
         Json = request.get_json(force=True)
-        MH = MongoHelper('localhost', 27017)
-        MH.deleteData(Json['ids'])
-        MH.close()
+        self.MH.deleteData(Json['ids'])
         return UrlReturn
