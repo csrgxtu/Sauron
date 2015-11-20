@@ -14,6 +14,11 @@ from ReturnFormat import UrlReturn
 from MongoHelper import MongoHelper
 
 class VisitedRes(Resource):
+    MH = None
+
+    def __init__(self, MH):
+        self.MH = MH
+
     def put(self):
         # wanting {'urls': [{'url': 'http://go.com', 'spider': 'google'}]}
         Json = request.get_json(force=True)
@@ -21,30 +26,22 @@ class VisitedRes(Resource):
         for url in Json['urls']:
             documents.append(url)
 
-        MH = MongoHelper('localhost', 27017)
-        UrlReturn['data'] = MH.insertVisited({'documents': documents})
-        MH.close()
+        UrlReturn['data'] = self.MH.insertVisited({'documents': documents})
         return UrlReturn
 
     def get(self):
         args = request.args
-        MH = MongoHelper('localhost', 27017)
-        documents = MH.readVisited(args['spider'], args['start'], args['offset'])
-        MH.close()
+        documents = self.MH.readVisited(args['spider'], args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def post(self):
         args = request.args
-        MH = MongoHelper('localhost', 27017)
-        documents = MH.retrieveVisited(args['spider'], args['start'], args['offset'])
-        MH.close()
+        documents = self.MH.retrieveVisited(args['spider'], args['start'], args['offset'])
         UrlReturn['data'] = documents
         return UrlReturn
 
     def delete(self):
         Json = request.get_json(force=True)
-        MH = MongoHelper('localhost', 27017)
-        MH.deleteVisited(Json['ids'])
-        MH.close()
+        self.MH.deleteVisited(Json['ids'])
         return UrlReturn
