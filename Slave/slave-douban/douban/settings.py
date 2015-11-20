@@ -67,7 +67,7 @@ RETRY_HTTP_CODES = [400, 403, 408, 429, 500, 501, 502, 503, 504] # 404,
 
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
-CRAWLERA_USER = 'a7f47b8a2d7b4ab9b7f782669f0c729e'     # add your CRAWLERA_USER string value !!!
+CRAWLERA_USER = '***'     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
@@ -81,7 +81,7 @@ DOWNLOAD_TIMEOUT = 300
 # check if non-standard middlewares are used
 DOWNLOADER_MIDDLEWARES = {
     #'douban.downloadmiddlewares.googlecache.GoogleCache':50,
-    #'douban.downloadmiddlewares.randomuseragent.RandomUserAgent':400,       # UserAgent 400
+    #'downloadmiddlewares.randomuseragent.RandomUserAgent':400,       # UserAgent 400
     #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,               # RETRY_HTTP_CODES 500
     #'douban.downloadmiddlewares.randomproxy.RandomProxy':100,               # Proxy
