@@ -49,9 +49,9 @@ class FileRes(Resource):
         return
 
     def qiniuSave(self, string, filename):
-        access_key = ''
-        secrect_key = ''
-        bucket_name = ''
+        access_key = '_4TUdWfMQGZ5f2DFFmXbARs7pQLWmiPK-IFbSsw5'
+        secrect_key = '1x0lUvV11qxbWQO1G_XrMm6v-MSsDWJWNCJk2K67'
+        bucket_name = 'brpublic'
 
         q = qiniu.Auth(access_key, secrect_key)
         token = q.upload_token(bucket_name)
