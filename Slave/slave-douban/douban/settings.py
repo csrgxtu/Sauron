@@ -21,17 +21,17 @@ REACTOR_THREADPOOL_MAXSIZE = 10
 # ------------------------------------------------------CONCURRENT------------------------------------------------------
 #!< http://docs.pythontab.com/scrapy/scrapy0.24/topics/settings.html
 # Scrapy downloader 并发请求(concurrent requests)的最大值。 (default: 16)
-CONCURRENT_REQUESTS=40            #32
+CONCURRENT_REQUESTS=10            #32
 
 # The download delay setting will honor only one of CONCURRENT_REQUESTS_PER_DOMAIN and CONCURRENT_REQUESTS_PER_IP.
 # 对单个网站进行并发请求的最大值。(default: 8)
-CONCURRENT_REQUESTS_PER_DOMAIN=40 #32
+CONCURRENT_REQUESTS_PER_DOMAIN=10 #32
 
 # 当 CONCURRENT_REQUESTS_PER_IP 非0时，延迟针对的是每个ip而不是网站。
-CONCURRENT_REQUESTS_PER_IP=40
+CONCURRENT_REQUESTS_PER_IP=10
 
 #Item Processor(即 Item Pipeline) 同时处理(每个response的)item的最大值。默认:100
-CONCURRENT_ITEMS=40
+CONCURRENT_ITEMS=10
 
 
 # --------------------------------------------------------DOWNLOAD------------------------------------------------------
@@ -67,7 +67,7 @@ RETRY_HTTP_CODES = [400, 403, 408, 429, 500, 501, 502, 503, 504] # 404,
 
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
-CRAWLERA_USER = '***'     # add your CRAWLERA_USER string value !!!
+CRAWLERA_USER = '8e8fb8e3fd8e476ab383a447b8dd1509'     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
@@ -89,4 +89,4 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy_crawlera.CrawleraMiddleware': 500,                               # crawlera
 }
 # To make RotateUserAgentMiddleware enable.
-USER_AGENT = ''
+#USER_AGENT = ''
