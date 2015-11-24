@@ -40,7 +40,7 @@ class MongoHelper(object):
     def insertVisited(self, documents):
         newDocuments = []
         for document in documents['documents']:
-            if self.isUnique(document['url']):
+            if self.isUnique(document['url'], document['spider']):
                 newDocuments.append(document)
 
         if len(newDocuments) == 0:
@@ -52,7 +52,7 @@ class MongoHelper(object):
     def insertDead(self, documents):
         newDocuments = []
         for document in documents['documents']:
-            if self.isUnique(document['url']):
+            if self.isUnique(document['url'], document['spider']):
                 newDocuments.append(document)
 
         if len(newDocuments) == 0:
