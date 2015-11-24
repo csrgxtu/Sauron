@@ -46,6 +46,7 @@ class DoubanISBN(Spider):
         if url:
             # retrieve with post method, put for create, get for read, delete for delete
             # unvisitedurls http://localhost:5000/unvisitedurls?start=0&offset=10&spider=douban
+            unirest.timeout(180)
             req = unirest.post(url, headers={"Accept":"application/json"})
             self.start_urls = [data['url'] for data in req.body['data']]
 
@@ -269,6 +270,7 @@ class DoubanISBN(Spider):
         lenOfdeadUrls = len(self.deadurldict['urls'])
 
         if (lenOfdeadUrls==10):
+            unirest.timeout(180)
             resdeadurl = unirest.put(
                             "http://192.168.100.3:5000/deadurls",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
@@ -276,18 +278,20 @@ class DoubanISBN(Spider):
                         )
 
         elif(lenOfdeadUrls==0):
+            unirest.timeout(180)
             resvisitedurl = unirest.put(
                             "http://192.168.100.3:5000/visitedurls",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.visitedurldict)
                         )
 
+            unirest.timeout(180)
             resdata = unirest.put(
                             "http://192.168.100.3:5000/data",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.datadict)
                          )
-
+            unirest.timeout(180)
             resfile = unirest.put(
                             "http://192.168.100.3:5000/file",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
@@ -295,25 +299,25 @@ class DoubanISBN(Spider):
                          )
 
         else:# lenOfdeadUrls in (0,10)
-
+            unirest.timeout(180)
             resvisitedurl = unirest.put(
                             "http://192.168.100.3:5000/visitedurls",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.visitedurldict)
                         )
-
+            unirest.timeout(180)
             resdata = unirest.put(
                             "http://192.168.100.3:5000/data",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.datadict)
                          )
-
+            unirest.timeout(180)
             resfile = unirest.put(
                             "http://192.168.100.3:5000/file",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
                             params=json.dumps(self.filedict)
                          )
-
+            unirest.timeout(180)
             resdeadurl = unirest.put(
                             "http://192.168.100.3:5000/deadurls",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
