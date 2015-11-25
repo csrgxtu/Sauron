@@ -1,0 +1,55 @@
+2015-11-24 12:52:59 [10428] [INFO] Starting gunicorn 17.5
+2015-11-24 12:52:59 [10428] [INFO] Listening at: http://0.0.0.0:5000 (10428)
+2015-11-24 12:52:59 [10428] [INFO] Using worker: sync
+2015-11-24 12:52:59 [10433] [INFO] Booting worker with pid: 10433
+2015-11-24 12:52:59 [10434] [INFO] Booting worker with pid: 10434
+2015-11-24 12:52:59 [10435] [INFO] Booting worker with pid: 10435
+2015-11-24 12:52:59 [10440] [INFO] Booting worker with pid: 10440
+2015-11-24 12:52:59 [10449] [INFO] Booting worker with pid: 10449
+2015-11-24 12:52:59 [10455] [INFO] Booting worker with pid: 10455
+2015-11-24 12:52:59 [10464] [INFO] Booting worker with pid: 10464
+2015-11-24 12:52:59 [10473] [INFO] Booting worker with pid: 10473
+2015-11-24 12:52:59 [10474] [INFO] Booting worker with pid: 10474
+2015-11-24 12:52:59 [10480] [INFO] Booting worker with pid: 10480
+2015-11-24 12:52:59 [10483] [INFO] Booting worker with pid: 10483
+2015-11-24 12:52:59 [10492] [INFO] Booting worker with pid: 10492
+2015-11-24 12:52:59 [10493] [INFO] Booting worker with pid: 10493
+2015-11-24 12:52:59 [10501] [INFO] Booting worker with pid: 10501
+2015-11-24 12:52:59 [10504] [INFO] Booting worker with pid: 10504
+2015-11-24 12:52:59 [10508] [INFO] Booting worker with pid: 10508
+2015-11-24 13:09:05 [10504] [INFO] Worker exiting (pid: 10504)
+2015-11-24 13:09:05 [10474] [INFO] Worker exiting (pid: 10474)
+2015-11-24 13:09:05 [10492] [INFO] Worker exiting (pid: 10492)
+2015-11-24 13:09:05 [10428] [INFO] Handling signal: term
+2015-11-24 13:09:05 [10493] [INFO] Worker exiting (pid: 10493)
+2015-11-24 13:09:05 [10464] [INFO] Worker exiting (pid: 10464)
+2015-11-24 13:09:05 [10455] [INFO] Worker exiting (pid: 10455)
+2015-11-24 13:09:05 [10449] [INFO] Worker exiting (pid: 10449)
+2015-11-24 13:09:05 [10440] [INFO] Worker exiting (pid: 10440)
+2015-11-24 13:09:05 [10435] [INFO] Worker exiting (pid: 10435)
+2015-11-24 13:09:05 [10434] [INFO] Worker exiting (pid: 10434)
+2015-11-24 13:09:05 [10433] [INFO] Worker exiting (pid: 10433)
+2015-11-24 13:09:05 [10508] [INFO] Worker exiting (pid: 10508)
+2015-11-24 13:09:05 [10501] [INFO] Worker exiting (pid: 10501)
+2015-11-24 13:09:05 [10483] [INFO] Worker exiting (pid: 10483)
+2015-11-24 13:09:05 [10480] [INFO] Worker exiting (pid: 10480)
+2015-11-24 13:09:05 [10428] [INFO] Shutting down: Master
+2015-11-24 13:09:10 [13396] [INFO] Starting gunicorn 17.5
+2015-11-24 13:09:10 [13396] [INFO] Listening at: http://0.0.0.0:5000 (13396)
+2015-11-24 13:09:10 [13396] [INFO] Using worker: sync
+2015-11-24 13:09:10 [13401] [INFO] Booting worker with pid: 13401
+2015-11-24 13:09:10 [13402] [INFO] Booting worker with pid: 13402
+2015-11-24 13:09:10 [13407] [INFO] Booting worker with pid: 13407
+2015-11-24 13:09:10 [13414] [INFO] Booting worker with pid: 13414
+2015-11-24 13:09:10 [13419] [INFO] Booting worker with pid: 13419
+2015-11-24 13:09:10 [13423] [INFO] Booting worker with pid: 13423
+2015-11-24 13:09:11 [13434] [INFO] Booting worker with pid: 13434
+2015-11-24 13:09:11 [13440] [INFO] Booting worker with pid: 13440
+2015-11-24 13:09:11 [13446] [INFO] Booting worker with pid: 13446
+2015-11-24 13:09:11 [13447] [INFO] Booting worker with pid: 13447
+2015-11-24 13:09:11 [13449] [INFO] Booting worker with pid: 13449
+2015-11-24 13:09:11 [13461] [INFO] Booting worker with pid: 13461
+2015-11-24 13:09:11 [13462] [INFO] Booting worker with pid: 13462
+2015-11-24 13:09:11 [13473] [INFO] Booting worker with pid: 13473
+2015-11-24 13:09:11 [13482] [INFO] Booting worker with pid: 13482
+2015-11-24 13:09:11 [13488] [INFO] Booting worker with pid: 13488

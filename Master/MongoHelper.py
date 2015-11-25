@@ -28,7 +28,7 @@ class MongoHelper(object):
         # remove this document, else prepare insert it into unvisited
         newDocuments = []
         for document in documents['documents']:
-            if self.isUnique(document['url']):
+            if self.isUnique(document['url'], document['spider']):
                 newDocuments.append(document)
 
         if len(newDocuments) == 0:
@@ -40,7 +40,7 @@ class MongoHelper(object):
     def insertVisited(self, documents):
         newDocuments = []
         for document in documents['documents']:
-            if self.isUnique(document['url']):
+            if self.isUnique(document['url'], document['spider']):
                 newDocuments.append(document)
 
         if len(newDocuments) == 0:
@@ -52,7 +52,7 @@ class MongoHelper(object):
     def insertDead(self, documents):
         newDocuments = []
         for document in documents['documents']:
-            if self.isUnique(document['url']):
+            if self.isUnique(document['url'], document['spider']):
                 newDocuments.append(document)
 
         if len(newDocuments) == 0:
@@ -179,32 +179,32 @@ class MongoHelper(object):
     def close(self):
         self.Client.close()
 
-    def isUnique(self, url):
-        if self.inUnvisited(url):
+    def isUnique(self, url, spider):
+        if self.inUnvisited(url, spider):
             return False
-        elif self.inVisited(url):
+        elif self.inVisited(url, spider):
             return False
-        elif self.inDead(url):
+        elif self.inDead(url, spider):
             return False
         else:
             return True
 
-    def inUnvisited(self, url):
-        count = self.DB['unvisited'].count({'url': url})
+    def inUnvisited(self, url, spider):
+        count = self.DB['unvisited'].count({'url': url, 'spider': spider})
         if count == 0:
             return False
 
         return True
 
-    def inVisited(self, url):
-        count = self.DB['visited'].count({'url': url})
+    def inVisited(self, url, spider):
+        count = self.DB['visited'].count({'url': url, 'spider': spider})
         if count == 0:
             return False
 
         return True
 
-    def inDead(self, url):
-        count = self.DB['dead'].count({'url': url})
+    def inDead(self, url, spider):
+        count = self.DB['dead'].count({'url': url, 'spider': spider})
         if count == 0:
             return False
 
