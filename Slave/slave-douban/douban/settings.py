@@ -16,22 +16,22 @@ LOG_ENABLED = True
 #LOG_FILE = './logs/booksisbn.log'
 
 # The maximum limit for Twisted Reactor thread pool size. Default: 10.
-REACTOR_THREADPOOL_MAXSIZE = 10
+REACTOR_THREADPOOL_MAXSIZE = 32
 
 # ------------------------------------------------------CONCURRENT------------------------------------------------------
 #!< http://docs.pythontab.com/scrapy/scrapy0.24/topics/settings.html
 # Scrapy downloader 并发请求(concurrent requests)的最大值。 (default: 16)
-CONCURRENT_REQUESTS=10            #32
+CONCURRENT_REQUESTS=32             #32
 
 # The download delay setting will honor only one of CONCURRENT_REQUESTS_PER_DOMAIN and CONCURRENT_REQUESTS_PER_IP.
 # 对单个网站进行并发请求的最大值。(default: 8)
-CONCURRENT_REQUESTS_PER_DOMAIN=10 #32
+CONCURRENT_REQUESTS_PER_DOMAIN=32 #32
 
 # 当 CONCURRENT_REQUESTS_PER_IP 非0时，延迟针对的是每个ip而不是网站。
-CONCURRENT_REQUESTS_PER_IP=10
+CONCURRENT_REQUESTS_PER_IP=32
 
 #Item Processor(即 Item Pipeline) 同时处理(每个response的)item的最大值。默认:100
-CONCURRENT_ITEMS=10
+CONCURRENT_ITEMS=100 
 
 
 # --------------------------------------------------------DOWNLOAD------------------------------------------------------
@@ -45,12 +45,12 @@ CONCURRENT_ITEMS=10
 COOKIES_ENABLED = True
 
 # ---------------------------------------DOWNLOADER_MIDDLEWARES setting ------------------------------------------------
-RETRY_ENABLED = True
+#RETRY_ENABLED = True
 # https://github.com/aivarsk/scrapy-proxies
 # Retry many times since proxies often fail
-RETRY_TIMES = 10
+#RETRY_TIMES = 10
 # Retry on most error codes since proxies fail for different reasons
-RETRY_HTTP_CODES = [400, 403, 408, 429, 500, 501, 502, 503, 504] # 404,
+#RETRY_HTTP_CODES = [400, 403, 408, 429, 500, 501, 502, 503, 504] # 404,
 """
 400:请求出错-->由于语法格式有误，服务器无法理解此请求。不作修改，客户程序就无法重复此请求。
 403:禁止访问
@@ -67,7 +67,7 @@ RETRY_HTTP_CODES = [400, 403, 408, 429, 500, 501, 502, 503, 504] # 404,
 
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
-CRAWLERA_USER = '8e8fb8e3fd8e476ab383a447b8dd1509'     # add your CRAWLERA_USER string value !!!
+CRAWLERA_USER = ''     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
@@ -83,7 +83,7 @@ DOWNLOADER_MIDDLEWARES = {
     #'douban.downloadmiddlewares.googlecache.GoogleCache':50,
     #'downloadmiddlewares.randomuseragent.RandomUserAgent':400,       # UserAgent 400
     #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,               # RETRY_HTTP_CODES 500
+    #'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,               # RETRY_HTTP_CODES 500
     #'douban.downloadmiddlewares.randomproxy.RandomProxy':100,               # Proxy
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
     'scrapy_crawlera.CrawleraMiddleware': 500,                               # crawlera
