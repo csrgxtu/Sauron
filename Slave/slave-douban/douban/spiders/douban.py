@@ -41,14 +41,13 @@ class DoubanISBN(Spider):
 
     #!< load isbns file.
     def __init__(self, url=None):
-
-        #print "here i am"
         if url:
             # retrieve with post method, put for create, get for read, delete for delete
             # unvisitedurls http://localhost:5000/unvisitedurls?start=0&offset=10&spider=douban
             unirest.timeout(180)
             req = unirest.post(url, headers={"Accept":"application/json"})
             self.start_urls = [data['url'] for data in req.body['data']]
+            self.name = url[url.find('spider=')+7:]
 
             self.visitedurldict = OrderedDict()
             self.datadict       = OrderedDict()
@@ -213,12 +212,12 @@ class DoubanISBN(Spider):
         if (200<=urlstate<400):
             #!< visitedurls !!!
             urldt = {}
-            urldt = {'url':bookurl, 'spider':'douban'}
+            urldt = {'url':bookurl, 'spider':self.name}
             self.visitedurldict['urls'].append(urldt)
 
             #!< datas !!!
             bookdt = {}
-            bookdt = {'url':bookurl, 'data':orderdict, 'spider':'douban'}
+            bookdt = {'url':bookurl, 'data':orderdict, 'spider':self.name}
             self.datadict['datas'].append(bookdt)
 
             #!< file !!!
@@ -227,30 +226,14 @@ class DoubanISBN(Spider):
                         'url':bookurl,
                         'head':response.headers.to_string(),
                         'body':response.body,
-                        'spider':'douban'
+                        'spider':self.name 
                     }
             self.filedict['files'].append(filedt)
         else:
             #!< deadurls !!!
             urldt = {}
-            urldt = {'url':bookurl, 'spider':'douban'}
+            urldt = {'url':bookurl, 'spider':self.name}
             self.deadurldict['urls'].append(urldt)
-
-            # if (urlstate==403):
-            #
-            #     settings.overrides['CRAWLERA_ENABLED'] = True
-            #     settings.overrides['CRAWLERA_USER'] = '***'
-            #     settings.overrides['CRAWLERA_PASS'] = ''
-            #     settings.overrides['DOWNLOADER_MIDDLEWARES'] = {
-            #         'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,  # RETRY_HTTP_CODES 500
-            #         'scrapy_crawlera.CrawleraMiddleware': 500,                  # crawlera
-            #     }
-            #     logging.info('Try overrides settings!!!')
-            #     logging.info(settings['CRAWLERA_ENABLED'])
-            #     logging.info(settings['CRAWLERA_USER'])
-            #     logging.info(settings['CRAWLERA_PASS'])
-            #     logging.info(settings['DOWNLOADER_MIDDLEWARES'])
-            #     logging.info('The Fuck')
 
 
     # !< overwrite!
