@@ -251,6 +251,11 @@ class DoubanISBN(Spider):
         """
         #scrapy crawl douban -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban'
         lenOfdeadUrls = len(self.deadurldict['urls'])
+        logging.info('spider name:' + self.name                             )
+        logging.info('visitedurls:' + str(len(self.visitedurldict['urls'])) )
+        logging.info('datadict   :' + str(len(self.datadict['datas']))      )
+        logging.info('filedict   :' + str(len(self.filedict['files']))      )
+        logging.info('deadurls   :' + str(len(self.deadurldict['urls']))    )
 
         if (lenOfdeadUrls==10):
             unirest.timeout(180)
