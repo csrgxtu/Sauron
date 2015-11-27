@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-
-PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
-
 BOT_NAME = 'douban'
 
 SPIDER_MODULES = ['douban.spiders']
@@ -12,7 +8,7 @@ NEWSPIDER_MODULE = 'douban.spiders'
 # --------------------------------------------------------LOG_Thread----------------------------------------------------
 # LOG_ENABLED default: True
 LOG_ENABLED = True
-#LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'INFO'
 #LOG_FILE = './logs/booksisbn.log'
 
 # The maximum limit for Twisted Reactor thread pool size. Default: 10.
@@ -31,7 +27,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN=32 #32
 CONCURRENT_REQUESTS_PER_IP=32
 
 #Item Processor(即 Item Pipeline) 同时处理(每个response的)item的最大值。默认:100
-CONCURRENT_ITEMS=100 
+CONCURRENT_ITEMS=100
 
 
 # --------------------------------------------------------DOWNLOAD------------------------------------------------------
@@ -70,9 +66,8 @@ CRAWLERA_ENABLED = True
 CRAWLERA_USER = ''     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
+DOWNLOAD_TIMEOUT = 180
 
-
-DOWNLOAD_TIMEOUT = 300
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
 #To avoid this behaviour you can use the CRAWLERA_PRESERVE_DELAY setting
 #but keep in mind that this may slow down the crawl significantly
