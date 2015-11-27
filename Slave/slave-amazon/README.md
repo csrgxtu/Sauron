@@ -24,17 +24,12 @@
 ### Needs
 * [python](https://www.python.org/downloads/)
 * [scrapy](http://doc.scrapy.org/en/latest/)
-* [pymongo](http://api.mongodb.org/python/current/)
-* [MongoDB](https://www.mongodb.org/)
 * [unirest](http://unirest.io/python.html)
 
 
 ### Usage
-
-[JOBDIR](http://doc.scrapy.org/en/latest/topics/jobs.html) Jobs: pausing and resuming crawls.
-
 	在含有.cfg文件的目录下,输入以下命令,
-	$scrapy crawl amazon -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=douban' -s JOBDIR=crawls/amazon
+	$scrapy crawl amazon -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=amazon'
 
 
 ### Note
