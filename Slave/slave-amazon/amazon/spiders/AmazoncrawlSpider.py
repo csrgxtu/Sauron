@@ -68,6 +68,7 @@ class AmazoncrawlSpider(Spider):
         sel = Selector(text=response.body)
         orderdict = OrderedDict()
 
+        #!< ---------------------------------------书名，书籍封面URL，评分-----------------------------------------------
         #!< 书名
         name = ''
         bookname = sel.xpath('//span[@id="productTitle"]/text()').extract()
@@ -78,7 +79,63 @@ class AmazoncrawlSpider(Spider):
             name = kindlename[0]
         orderdict[u'书名'] = name.strip()
 
+        #!< 书籍封面URL
+        #1.books
+        texturl = response.body
+        #Re = r"http://ec4.images-amazon.com/images/I/[\w]+-?%?_?.?[\w]+.jpg"
+        Re = r'''"mainUrl":"http://ec4.images-amazon.com/images/I/[\w]+.+[\w]+.jpg"'''
+        imgurls = re.findall(Re, texturl)
 
+        #2.kindle books
+        kindleRe = r'''"large":"http://ec4.images-amazon.com/images/I/[\w]+.+[\w]+.jpg"'''
+        kimgurls = re.findall(kindleRe, texturl)
+
+        imgurl = str()
+        if (imgurls != []):# be sure mainUrl in imgurls
+            #imgurl = imgurls[0]
+            endindex = imgurls[0].find('''","dimensions"''')
+            imgurl = imgurls[0][11:endindex]
+
+        elif(kimgurls != []):# be sure large in imgurls
+            endindex = kimgurls[0].find('''","variant"''')
+            imgurl = kimgurls[0][9:endindex]
+        else:
+            raise ("Not cover!")
+
+        if (imgurl.startswith('http://ec4.images-amazon.com/images/I/')):
+            #'http://ec8.images-amazon.com/images/I/91bpj-PbL1L.jpg'
+            orderdict[u'书籍封面'] = imgurl
+        else:
+            orderdict[u'书籍封面'] = None
+
+        #!< 用户评分
+        score = ''
+        try:
+            #score = sel.xpath('//span[@id="acrPopover"]/@title').extract()
+            score = sel.xpath('//div[@id="avgRating"]/span/text()').extract()
+            if (score != []):
+                score = score[0].strip()
+            else: # kindle
+                score = sel.xpath('//div[@class="gry txtnormal acrRating"]/text()').extract()
+                if (score != []):
+                    score = score[0].strip()
+        except:
+            score = None
+        orderdict[u'用户评分'] = score
+
+        #!< 亚马逊热销商品排名
+        rank =''
+        try: # book and kindle
+            ranks = sel.xpath('//li[@id="SalesRank"]/text()').extract()
+            if (ranks != []) and (len(ranks)>=2):
+                for i in ranks[1]:
+                    if (' ' not in i) and ('\n' not in i) and ('(' not in i):
+                        rank += i
+        except:
+            rank = None
+        orderdict[u'亚马逊热销商品排名'] = rank
+
+        #!< 作者，出版社，原书名，译者，出版年，页数，定价，装帧，丛书，ISBN
         #!< 作者
         author = sel.xpath('//span[@class="author notFaded"]/a[@class="a-link-normal"]/text()').extract()
         authorlocation = sel.xpath('//span[@class="author notFaded"]/span/span[@class="a-color-secondary"]/text()').extract()
@@ -127,35 +184,6 @@ class AmazoncrawlSpider(Spider):
         except:
             orderdict['xRay'] = None
 
-        #!< 用户评分
-        score = ''
-        try:
-            #score = sel.xpath('//span[@id="acrPopover"]/@title').extract()
-            score = sel.xpath('//div[@id="avgRating"]/span/text()').extract()
-            if (score != []):
-                score = score[0].strip()
-            else: # kindle
-                score = sel.xpath('//div[@class="gry txtnormal acrRating"]/text()').extract()
-                if (score != []):
-                    score = score[0].strip()
-        except:
-            score = None
-
-
-        #!< 亚马逊热销商品排名
-        rank =''
-        try: # book and kindle
-            ranks = sel.xpath('//li[@id="SalesRank"]/text()').extract()
-            if (ranks != []) and (len(ranks)>=2):
-                for i in ranks[1]:
-                    if (' ' not in i) and ('\n' not in i) and ('(' not in i):
-                        rank += i
-        except:
-            rank = None
-        orderdict[u'用户评分'] = score
-        orderdict[u'亚马逊热销商品排名'] = rank
-
-
         #!< 书籍价格
         PZprice = sel.xpath('//span[@class="a-button-inner"]/a/span/span/text()').extract()
         if (PZprice != []): # book
@@ -172,35 +200,20 @@ class AmazoncrawlSpider(Spider):
                 price = PZprice[0].strip()
                 orderdict[u'Kindle电子书价格'] = price
 
+        #!< 内容简介 & 作者简介
+        #TODO
 
-        #!< 书籍封面
-        #1.books
-        texturl = response.body
-        #Re = r"http://ec4.images-amazon.com/images/I/[\w]+-?%?_?.?[\w]+.jpg"
-        Re = r'''"mainUrl":"http://ec4.images-amazon.com/images/I/[\w]+.+[\w]+.jpg"'''
-        imgurls = re.findall(Re, texturl)
 
-        #2.kindle books
-        kindleRe = r'''"large":"http://ec4.images-amazon.com/images/I/[\w]+.+[\w]+.jpg"'''
-        kimgurls = re.findall(kindleRe, texturl)
+        #!< 标签
+        #TODO
 
-        imgurl = str()
-        if (imgurls != []):# be sure mainUrl in imgurls
-            #imgurl = imgurls[0]
-            endindex = imgurls[0].find('''","dimensions"''')
-            imgurl = imgurls[0][11:endindex]
 
-        elif(kimgurls != []):# be sure large in imgurls
-            endindex = kimgurls[0].find('''","variant"''')
-            imgurl = kimgurls[0][9:endindex]
-        else:
-            raise ("Not cover!")
+        #!< 相关推荐书目
+        #TODO
 
-        if (imgurl.startswith('http://ec4.images-amazon.com/images/I/')):
-            #'http://ec8.images-amazon.com/images/I/91bpj-PbL1L.jpg'
-            orderdict[u'书籍封面'] = imgurl
-        else:
-            orderdict[u'书籍封面'] = None
+
+        #!< 书籍购买来源
+        #TODO
 
 
         #!< 书籍链接
