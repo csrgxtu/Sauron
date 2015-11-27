@@ -7,6 +7,10 @@ from scrapy.spiders import  Spider,Rule
 from scrapy.selector import Selector
 from scrapy.linkextractors import LinkExtractor as sle
 from collections import OrderedDict
+import logging
+
+from scrapy import signals
+from scrapy.xlib.pydispatch import dispatcher
 
 #!< 运行spider
 # scrapy crawl amazon -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=amazon' -s JOBDIR=crawls/amazon
@@ -16,17 +20,44 @@ class AmazoncrawlSpider(Spider):
     name            = "amazon"
     allowed_domains = ["amazon.cn"]
 
+    handle_httpstatus_list = [\
+    400, 401, 402, 403, 404, 405, 406, 407, 408, 409,\
+    410, 411, 412, 413, 414, 415, 416, 417, 418, 419,\
+    420, 421, 422, 423, 424, 426, 428, 429, 431,\
+    440, 444, 449,\
+    450, 451,\
+    494, 495, 496, 496, 497, 498, 499,\
+    500, 501, 502, 503, 504, 505, 506, 507, 508, 509,\
+    510, 511,\
+    520, 522,\
+    598, 599\
+    ]
+
     #!< load bookurl file.
     def __init__(self, url=None):
+
         if url:
             # retrieve with post method, put for create, get for read, delete for delete
             # unvisitedurls http://localhost:5000/unvisitedurls?start=0&offset=10&spider=amazon
             req = unirest.post(url, headers={"Accept":"application/json"})
             self.start_urls = [data['url'] for data in req.body['data']]
+            self.name = url[url.find('spider=')+7:]
 
-    rules = (
-        Rule(sle(allow=("http://www.amazon.cn/gp/product/[\w]{10,10}$")), callback="parse", follow=True),
-    )
+            self.visitedurldict = OrderedDict()
+            self.datadict       = OrderedDict()
+            self.filedict       = OrderedDict()
+            self.deadurldict    = OrderedDict()
+
+            self.visitedurldict['urls'] = []
+            self.datadict['datas']      = []
+            self.filedict['files']      = []
+            self.deadurldict['urls']    = []
+            rules = (
+                Rule(sle(allow=("http://www.amazon.cn/gp/product/[\w]{10,10}$")), callback="parse", follow=True),
+            )
+
+        # def __del__(self) work
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
 
     #!< 单独处理每一本书籍信息
     def parse(self, response):
@@ -176,46 +207,105 @@ class AmazoncrawlSpider(Spider):
         bookurl  = response.url
         orderdict[u'书籍链接'] = bookurl
 
-
         #!< return data to 192.168.100.3:5000 !!! !!! !!!
-        urlstate = response.status
-        posturl = str()
-        if (urlstate==200):
-            #!< book datas !!!
-            bookdict = {}
-            bookdict['datas'] = [{'url':bookurl, 'data':orderdict, 'spider':'amazon'}]
+        #posturl = str()
+        if (200<=urlstate<400):
+            #!< visitedurls !!!
+            urldt = {}
+            urldt = {'url':bookurl, 'spider':self.name}
+            self.visitedurldict['urls'].append(urldt)
+
+            #!< datas !!!
+            bookdt = {}
+            bookdt = {'url':bookurl, 'data':orderdict, 'spider':self.name}
+            self.datadict['datas'].append(bookdt)
+
+            #!< file !!!
+            filedt = {}
+            filedt = {
+                        'url':bookurl,
+                        'head':response.headers.to_string(),
+                        'body':response.body,
+                        'spider':self.name
+                    }
+            self.filedict['files'].append(filedt)
+        else:
+            #!< deadurls !!!
+            urldt = {}
+            urldt = {'url':bookurl, 'spider':self.name}
+            self.deadurldict['urls'].append(urldt)
+
+
+    # !< overwrite!
+    def spider_closed(self, spider):
+        """
+        Put visitedurldict, datadict, filedict,  deadurldict to Master.
+        Format:
+        visitedurldict['urls'] = [ {'url':'', 'spider':self.name},  {'url':'', 'spider':self.name} ]
+
+        datadict['datas']      = [ {'url':'', 'data':{}, 'spider':self.name},  {'url':'', 'data':{}, 'spider':self.name} ]
+
+        filedict['files']      = [ {'url':'', 'head':'', 'body':'', 'spider':self.name},  {'url':'', 'head':'', 'body':'', 'spider':self.name} ]
+
+        deadurldict['urls']    = [ {'url':'', 'spider':self.name},  {'url':'', 'spider':self.name} ]
+        """
+        lenOfdeadUrls = len(self.deadurldict['urls'])
+        logging.info('spidername ' + self.name + '!!!')
+        logging.info('visitedurls' + str(len(self.visitedurldict['urls'])))
+        logging.info('datadict   ' + str(len(self.datadict['datas'])))
+        logging.info('filedict   ' + str(len(self.filedict['files'])))
+        logging.info('deadurls   ' + str(len(self.deadurldict['urls'])))
+
+        if (lenOfdeadUrls==10):
+            unirest.timeout(180)
+            resdeadurl = unirest.put(
+                            "http://192.168.100.3:5000/deadurls",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(self.deadurldict)
+                        )
+
+        elif(lenOfdeadUrls==0):
+            unirest.timeout(180)
+            resvisitedurl = unirest.put(
+                            "http://192.168.100.3:5000/visitedurls",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(self.visitedurldict)
+                        )
+            unirest.timeout(180)
             resdata = unirest.put(
                             "http://192.168.100.3:5000/data",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
-                            params=json.dumps(bookdict)
+                            params=json.dumps(self.datadict)
                          )
-
-            #!< file-->bookurl , headers, body, spider !!!
-            filedict = {}
-            filedict['files'] = [{
-                                    'url':bookurl,
-                                    'head':response.headers.to_string(),
-                                    'body':response.body,
-                                    'spider':'amazon'
-                                }]
+            unirest.timeout(180)
             resfile = unirest.put(
                             "http://192.168.100.3:5000/file",
                             headers={ "Accept": "application/json", "Content-Type": "application/json" },
-                            params=json.dumps(filedict)
+                            params=json.dumps(self.filedict)
                          )
 
-            #!< visitedurls !!!
-            posturl = "http://192.168.100.3:5000/visitedurls"
-
-        else:
-            #!< deadurls !!!
-            posturl = "http://192.168.100.3:5000/deadurls"
-
-        #!< visitedurls or deadurls and spider !!!
-        urldict = {}
-        urldict['urls'] = [{'url':bookurl, 'spider':'amazon'}]
-        resurl = unirest.put(
-                        posturl,
-                        headers={ "Accept": "application/json", "Content-Type": "application/json" },
-                        params=json.dumps(urldict)
-                    )
+        else:# lenOfdeadUrls in (0,10)
+            unirest.timeout(180)
+            resvisitedurl = unirest.put(
+                            "http://192.168.100.3:5000/visitedurls",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(self.visitedurldict)
+                        )
+            unirest.timeout(180)
+            resdata = unirest.put(
+                            "http://192.168.100.3:5000/data",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(self.datadict)
+                         )
+            unirest.timeout(180)
+            resfile = unirest.put(
+                            "http://192.168.100.3:5000/file",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(self.filedict)
+                         )
+            unirest.timeout(180)
+            resdeadurl = unirest.put(
+                            "http://192.168.100.3:5000/deadurls",
+                            headers={ "Accept": "application/json", "Content-Type": "application/json" },
+                            params=json.dumps(self.deadurldict)
+                        )
