@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-
-PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
-
 BOT_NAME = 'amazon'
 SPIDER_MODULES = ['amazon.spiders']
 NEWSPIDER_MODULE = 'amazon.spiders'
@@ -16,31 +12,6 @@ LOG_LEVEL = 'INFO'
 # The maximum limit for Twisted Reactor thread pool size. Default: 10.
 REACTOR_THREADPOOL_MAXSIZE = 50
 
-# --------------------------------------------------------------------------------------------------------------------
-"""
-MONGODB_SERVER = 'localhost'
-MONGODB_PORT = 27017
-MONGODB_DB = 'amazon'
-MONGODB_COLLECTION = 'bookstest' # books
-
-FEED_URI    = 'bookdata.csv'
-FEED_FORMAT = 'csv'
-
-IMAGES_STORE = os.path.join(PROJECT_DIR,'bookcovers')
-IMAGES_MIN_HEIGHT = 200
-IMAGES_MIN_WIDTH  = 200
-
-IMAGES_THUMBS = {
-    'small':(50,50),
-    'big':(270,270),
-}
-
-# 90 days of delay for files expiration
-#FILES_EXPIRES = 90
-
-# 30 days of delay for images expiration
-IMAGES_EXPIRES = 30
-"""
 # ---------------------------------------------------CONCURRENT-------------------------------------------------------
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS=32
@@ -62,19 +33,18 @@ COOKIES_ENABLED=True
 USER_AGENT  = ''
 
 # ---------------------------------------DOWNLOADER_MIDDLEWARES setting ------------------------------------------------
-RETRY_ENABLED = True
+#RETRY_ENABLED = True
 # https://github.com/aivarsk/scrapy-proxies
 # Retry many times since proxies often fail
-RETRY_TIMES = 10
+#RETRY_TIMES = 10
 # Retry on most error codes since proxies fail for different reasons
-RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
+#RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 """
 400:请求出错-->由于语法格式有误，服务器无法理解此请求。不作修改，客户程序就无法重复此请求。
 403:禁止访问
 404:找不到
 408:请求超时
 429:Too many connections.-->http://doc.scrapinghub.com/crawlera.html
-
 500:服务器的内部错误-->Web 服务器不能执行此请求。请稍后重试此请求。
 501:未实现-->Web 服务器不支持实现此请求所需的功能。
 502:网关出错-->当用作网关或代理时，服务器将从试图实现此请求时所访问的upstream 服务器中接收无效的响应。
@@ -84,7 +54,7 @@ RETRY_HTTP_CODES = [400, 403, 404, 408, 429, 500, 501, 502, 503, 504]
 
 #!< http://scrapinghub.com/crawlera/
 CRAWLERA_ENABLED = True
-CRAWLERA_USER = '***'     # add your CRAWLERA_USER string value !!!
+#CRAWLERA_USER = '***'     # add your CRAWLERA_USER string value !!!
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
@@ -97,12 +67,12 @@ DOWNLOAD_TIMEOUT = 600
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     #'amazon.downloadmiddlewares.googlecache.GoogleCache':50,
-    #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    #'amazon.downloadmiddlewares.randomuseragent.RandomUserAgent':400,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,               # RETRY_HTTP_CODES 500
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'amazon.downloadmiddlewares.randomuseragent.RandomUserAgent':400,
+    #'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,               # RETRY_HTTP_CODES 500
     #'amazon.downloadmiddlewares.randomproxy.RandomProxy':100,                # Proxy
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'scrapy_crawlera.CrawleraMiddleware': 600,                               # crawlera
+    #'scrapy_crawlera.CrawleraMiddleware': 600,                               # crawlera
 }
 
 
