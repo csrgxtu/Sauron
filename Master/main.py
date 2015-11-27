@@ -22,7 +22,7 @@ from FileRes import FileRes
 app = Flask(__name__)
 api = Api(app)
 
-MH = MongoHelper('localhost', 27019)
+MH = MongoHelper('192.168.100.3', 27019)
 
 api.add_resource(DefaultRes, '/')
 api.add_resource(UnvisitedRes, '/unvisitedurls', resource_class_kwargs={'MH': MH})
