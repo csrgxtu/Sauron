@@ -76,12 +76,12 @@ DOWNLOAD_TIMEOUT = 180
 # check if non-standard middlewares are used
 DOWNLOADER_MIDDLEWARES = {
     #'douban.downloadmiddlewares.googlecache.GoogleCache':50,
-    #'downloadmiddlewares.randomuseragent.RandomUserAgent':400,       # UserAgent 400
-    #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'downloadmiddlewares.randomuseragent.RandomUserAgent':400,       # UserAgent 400
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     #'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,               # RETRY_HTTP_CODES 500
     #'douban.downloadmiddlewares.randomproxy.RandomProxy':100,               # Proxy
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'scrapy_crawlera.CrawleraMiddleware': 500,                               # crawlera
+    #'scrapy_crawlera.CrawleraMiddleware': 500,                               # crawlera
 }
 # To make RotateUserAgentMiddleware enable.
-#USER_AGENT = ''
+USER_AGENT = ''
