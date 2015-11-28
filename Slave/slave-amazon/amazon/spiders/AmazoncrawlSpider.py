@@ -7,13 +7,18 @@ from scrapy.spiders import  Spider,Rule
 from scrapy.selector import Selector
 from scrapy.linkextractors import LinkExtractor as sle
 from collections import OrderedDict
-import logging
+import logging, json
 
 from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 
 #!< 运行spider
 # scrapy crawl amazon -a url='http://192.168.100.3:5000/unvisitedurls?start=0&offset=10&spider=amazon' -s JOBDIR=crawls/amazon
+def checkXpathResult(rlist):
+    if rlist != []:
+        return rlist[0]
+    else:
+        return []
 
 class AmazoncrawlSpider(Spider):
     #!< spider name
@@ -53,7 +58,7 @@ class AmazoncrawlSpider(Spider):
             self.filedict['files']      = []
             self.deadurldict['urls']    = []
             rules = (
-                Rule(sle(allow=("http://www.amazon.cn/gp/product/[\w]{10,10}$")), callback="parse", follow=True),
+                Rule(sle(allow=("http://www.amazon.cn/dp/[\w]{10,10}$")), callback="parse", follow=True),
             )
 
         # def __del__(self) work
@@ -100,7 +105,8 @@ class AmazoncrawlSpider(Spider):
             endindex = kimgurls[0].find('''","variant"''')
             imgurl = kimgurls[0][9:endindex]
         else:
-            raise ("Not cover!")
+            #raise ("Not cover!")
+            imgurl = ''
 
         if (imgurl.startswith('http://ec4.images-amazon.com/images/I/')):
             #'http://ec8.images-amazon.com/images/I/91bpj-PbL1L.jpg'
@@ -201,23 +207,46 @@ class AmazoncrawlSpider(Spider):
                 orderdict[u'Kindle电子书价格'] = price
 
         #!< 内容简介 & 作者简介
-        #TODO
+        trees = sel.xpath('//div[@id="s_contents"]/div')
+        infotitlelist = []
+        infotitlevaluelist = []
+        for tree in trees:
+            #infotitle
+            infotitle = checkXpathResult(tree.xpath('h3/text()').extract())
+            infotitlelist.append(infotitle)
 
-
-        #!< 标签
-        #TODO
-
+            #infotitlevalue
+            infotitlevalue = checkXpathResult(tree.xpath('p').extract())
+            infotitlevalue = infotitlevalue.strip().encode('utf-8')
+            if ('<p>' in infotitlevalue) or ('</p>' in infotitlevalue):
+                infotitlevalue = infotitlevalue.replace('<p>','')
+                infotitlevalue = infotitlevalue.replace('</p>','')
+            if ('<br>' in infotitlevalue):
+                infotitlevalue = infotitlevalue.replace('<br>','')
+            infotitlevaluelist.append(infotitlevalue)
+        #(k,v)
+        if (infotitlelist != []) and (infotitlevaluelist != []):
+            lenth = len(infotitlelist)
+            for i in xrange(lenth-1):
+                k, v = infotitlelist[i], infotitlevaluelist[i]
+                orderdict[k] = v
 
         #!< 相关推荐书目
-        #TODO
-
-
-        #!< 书籍购买来源
-        #TODO
-
+        simsbook = sel.xpath('//div[@id="purchase-sims-feature"]/div/@data-a-carousel-options').extract()
+        asinlist = []
+        if (simsbook != []):
+            data = simsbook[0]
+            dataencode = data.encode('utf-8')
+            r = re.compile('B\w{9,9}')
+            bookasins = re.findall(r, dataencode)
+        orderdict[u'相关推荐书目'] = asinlist
 
         #!< 书籍链接
         bookurl  = response.url
+        urlstate = response.status
+
+        #!< 书籍购买来源
+        orderdict[u'书籍购买来源'] = bookurl
         orderdict[u'书籍链接'] = bookurl
 
         #!< return data to 192.168.100.3:5000 !!! !!! !!!
