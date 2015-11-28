@@ -37,7 +37,7 @@ CRAWLERA_USER = ''
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 DOWNLOAD_TIMEOUT = 180
-DOWNLOAD_DELAY = 0
+#DOWNLOAD_DELAY = 0
 
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
 #To avoid this behaviour you can use the CRAWLERA_PRESERVE_DELAY setting
@@ -51,12 +51,12 @@ DEFAULT_REQUEST_HEADERS = {
 # check if non-standard middlewares are used
 DOWNLOADER_MIDDLEWARES = {
     #'downloadmiddlewares.googlecache.GoogleCache':50,
-    #'downloadmiddlewares.randomuseragent.RandomUserAgent':400,
-    #'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'downloadmiddlewares.randomuseragent.RandomUserAgent':400,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     #'scrapy.downloadermiddlewares.retry.RetryMiddleware': 600,
     #'downloadmiddlewares.randomproxy.RandomProxy':100,
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'scrapy_crawlera.CrawleraMiddleware': 500,
+    #'scrapy_crawlera.CrawleraMiddleware': 500,
 }
 # To make RotateUserAgentMiddleware enable.
-#USER_AGENT = ''
+USER_AGENT = ''
