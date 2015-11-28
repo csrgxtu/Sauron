@@ -6,7 +6,7 @@ NEWSPIDER_MODULE = 'amazon.spiders'
 
 # -------------------------------------------------scrapy-log setting ------------------------------------------------
 LOG_ENABLED = True
-LOG_LEVEL = 'INFO'
+#LOG_LEVEL = 'INFO'
 #LOG_FILE = './logs/amazon.log'
 
 # The maximum limit for Twisted Reactor thread pool size. Default: 10.
