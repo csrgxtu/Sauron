@@ -53,7 +53,7 @@ if (__name__=='__main__'):
     # 1. !< All unvisitedurls 65499 Done!!! --> 62792
     unvisitedISBN = unvisitedUrlF('./stdkaijuan.txt')
 
-    # 2. !< All deadurls (duplicate)        --> 58164
+    # 2. !< All deadurls (duplicate)        --> 4449
     #{"urls": [{'url':'', 'spider':'6w'}, {}..{}]}
     with open('./deadurls.json', 'rb') as f2:
         deadurlsdict = json.load(f2)
@@ -62,7 +62,7 @@ if (__name__=='__main__'):
     deadisbn = [d['url'][d['url'].find('isbn/')+5:-1] for d in deadurls]
     deadISBN = list(set(deadisbn))
 
-    # 3. !< All dataurls59075               --> 4449
+    # 3. !< All dataurls59075               --> 58164
     # mongoexport --host=192.168.100.3 --port=27019 --db=master --collection=data --query='{"spider":"6w"}' --fields="data.ISBN" --type=csv --out=dataISBN.csv
     dataISBN = dataUrlF('./dataISBN.csv')
 
