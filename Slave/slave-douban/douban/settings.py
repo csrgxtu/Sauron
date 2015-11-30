@@ -8,7 +8,7 @@ NEWSPIDER_MODULE = 'douban.spiders'
 # --------------------------------------------------------LOG_Thread----------------------------------------------------
 # LOG_ENABLED default: True
 LOG_ENABLED = True
-LOG_LEVEL = 'INFO'
+#LOG_LEVEL = 'INFO'
 #LOG_FILE = './logs/booksisbn.log'
 
 # The maximum limit for Twisted Reactor thread pool size. Default: 10.
