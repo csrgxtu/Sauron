@@ -229,7 +229,7 @@ class AmazoncrawlSpider(Spider):
             lenth = len(infotitlelist)
             for i in xrange(lenth-1):
                 k, v = infotitlelist[i], infotitlevaluelist[i]
-                orderdict[k] = v
+                orderdict[k] = v.strip()
 
         #!< 相关推荐书目
         simsbook = sel.xpath('//div[@id="purchase-sims-feature"]/div/@data-a-carousel-options').extract()
