@@ -58,7 +58,7 @@ CRAWLERA_ENABLED = True
 CRAWLERA_PASS = ''
 AUTOTHROTTLE_ENABLED = False
 
-DOWNLOAD_TIMEOUT = 600
+DOWNLOAD_TIMEOUT = 180
 #CrawleraMiddleware: disabling download delays on Scrapy side to optimize delays introduced by Crawlera.
 #To avoid this behaviour you can use the CRAWLERA_PRESERVE_DELAY setting
 #but keep in mind that this may slow down the crawl significantly
