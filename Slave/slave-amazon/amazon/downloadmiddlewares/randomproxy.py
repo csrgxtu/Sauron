@@ -5,8 +5,7 @@ from scrapy import log
 
 from urllib2 import urlopen
 
-url  = "http://svip.kuaidaili.com/api/getproxy/?orderid=983980639044193&num=10&browser=1&protocol=1&method=1&sp1=1&quality=0&sort=0&format=json&sep=1"
-
+url  = ''
 def updateIPs(url):
     dictproxies = {}
     req  = urlopen(url)
