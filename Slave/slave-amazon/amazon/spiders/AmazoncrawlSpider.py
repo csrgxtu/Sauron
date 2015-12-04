@@ -112,7 +112,7 @@ class AmazoncrawlSpider(Spider):
             #'http://ec8.images-amazon.com/images/I/91bpj-PbL1L.jpg'
             orderdict[u'书籍封面'] = imgurl
         else:
-            orderdict[u'书籍封面'] = None
+            orderdict[u'书籍封面'] = ''
 
         #!< 用户评分
         score = ''
@@ -126,7 +126,7 @@ class AmazoncrawlSpider(Spider):
                 if (score != []):
                     score = score[0].strip()
         except:
-            score = None
+            score = ''
         orderdict[u'用户评分'] = score
 
         #!< 亚马逊热销商品排名
@@ -138,7 +138,7 @@ class AmazoncrawlSpider(Spider):
                     if (' ' not in i) and ('\n' not in i) and ('(' not in i):
                         rank += i
         except:
-            rank = None
+            rank = ''
         orderdict[u'亚马逊热销商品排名'] = rank
 
         #!< 作者，出版社，原书名，译者，出版年，页数，定价，装帧，丛书，ISBN
@@ -188,7 +188,7 @@ class AmazoncrawlSpider(Spider):
             xray = sel.xpath('//a[@id="xrayPop"]/span/text()').extract()
             orderdict['xRay'] = xray[0]
         except:
-            orderdict['xRay'] = None
+            orderdict['xRay'] = ''
 
         #!< 书籍价格
         PZprice = sel.xpath('//span[@class="a-button-inner"]/a/span/span/text()').extract()
@@ -233,13 +233,13 @@ class AmazoncrawlSpider(Spider):
 
         #!< 相关推荐书目
         simsbook = sel.xpath('//div[@id="purchase-sims-feature"]/div/@data-a-carousel-options').extract()
-        asinlist = []
+        bookasins = ''
         if (simsbook != []):
             data = simsbook[0]
             dataencode = data.encode('utf-8')
             r = re.compile('B\w{9,9}')
             bookasins = re.findall(r, dataencode)
-        orderdict[u'相关推荐书目'] = asinlist
+        orderdict[u'相关推荐书目'] = bookasins
 
         #!< 书籍链接
         bookurl  = response.url
