@@ -71,18 +71,20 @@ if (__name__=='__main__'):
             url = preweb + asin
             d = {}
             d['spider'] = 'amazon'
-            d['url'] = url
-            d['asin'] = asin
+            d['url']    = url
+            d['asin']   = asin
+            d['isbn']   = isbn
             unvisitedUrllist.append(d)
-        print isbn + '-->' + asin
+        #print isbn + '-->' + asin
         cnt += 1
         if (cnt/50==0):
             time.sleep(5)
+        print cnt
 
     unvisitedUrldict = {}
     unvisitedUrldict['urls'] = unvisitedUrllist
 
-    with open('./amazonURL.json', 'wb') as fo:
+    with open('./amazonURLisbn.json', 'wb') as fo:
         json.dump(unvisitedUrldict, fo)
     fo.close()
 

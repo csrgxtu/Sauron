@@ -8,8 +8,8 @@ if (__name__=='__main__'):
         uvdict = json.load(f5)
     f5.close()
 
-    #uvlist = uvdict['urls']
-    #print len(uvlist), uvlist[0]
+    uvlist = uvdict['urls']
+    print len(uvlist), uvlist[0]
 
     unirest.timeout(180)
     resunvisitedurl = unirest.put(
